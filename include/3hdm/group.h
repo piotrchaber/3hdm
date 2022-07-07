@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "../../include/3hdm/mymatrix.h"
-#include "../../include/3hdm/representation.h"
+#include "mymatrix.h"
+#include "representation.h"
 
 class Group
 {

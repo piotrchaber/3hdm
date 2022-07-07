@@ -2,3 +2,7 @@
 .idea/
 .vscode/
 *.sw*
+
+# Ignore binary files
+*.exe
+*.o

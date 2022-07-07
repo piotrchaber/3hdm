@@ -15,7 +15,7 @@ int main()
 	std::cout << matrixss << "\n\n";
 
 	MyMatrix3cf matrixfile;
-	matrixfile.loadFromFile("doc/examples/tutorial_mymatrix.txt");
+	matrixfile.loadFromFile("tutorial_mymatrix.txt");
 	std::cout << matrixfile << '\n';
 
 	return EXIT_SUCCESS;

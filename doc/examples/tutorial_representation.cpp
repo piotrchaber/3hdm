@@ -24,7 +24,7 @@ int main()
 	//print(rep);
 
 	Representation3cd rep2;
-	rep2.loadFromFile("doc/examples/tutorial_representation.txt");
+	rep2.loadFromFile("tutorial_representation.txt");
 	print(rep2);
 
 	std::cout << "Dimension: " << rep2.dimension() << std::endl;

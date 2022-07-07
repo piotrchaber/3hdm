@@ -29,7 +29,7 @@ void print(UniqueSolutions& uniques, std::ostream& os = std::cout)
 int main()
 {
 	Group group("tutorial_group", 2);
-	group.loadFromFile("doc/examples/");
+	group.loadFromFile();
 
 	InvarianceEquationSolver ies(group, Particles::ChargedLeptons, Solution::Form::Particular);
 	Solutions solutions = ies.solutions();

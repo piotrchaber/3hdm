@@ -35,12 +35,12 @@ int main()
 	//Group group({ representation }, "[ 12, 3 ]", 3);
 
 	Group group2("[ 21, 1 ]", 2);
-	group2.loadFromFile("doc/examples/", "tutorial_group");
+	group2.loadFromFile("", "tutorial_group");
 	std::cout << "Group representations:" << '\n';
 	print(group2);
 
 	//Group group2("tutorial_group", 2);
-	//group2.loadFromFile("doc/examples/");
+	//group2.loadFromFile();
 	//std::cout << "Group representations:" << '\n';
 	//print(group2);
 
