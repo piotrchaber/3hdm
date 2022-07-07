@@ -40,7 +40,7 @@ void print(Solutions& solutions)
 int main()
 {
 	Group group("tutorial_group", 2);
-	group.loadFromFile("doc/examples/");
+	group.loadFromFile();
 
 	InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular);
 	ies.compute(group);
