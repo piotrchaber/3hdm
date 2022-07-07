@@ -4,14 +4,14 @@
 #include <fstream>
 #include <vector>
 
-#include "Eigen/Dense"
+#include "../../extern/eigen/Eigen/Dense"
 #include "mymatrix_simpl.h"
 
 template<typename _Scalar, int _Rows, int _Cols>
 class MyMatrix : public Eigen::Matrix<_Scalar, _Rows, _Cols> {
 public:
 	using Eigen::Matrix<_Scalar, _Rows, _Cols>::Matrix;
-	using Eigen::Matrix<_Scalar, _Rows, _Cols>::operator=;
+	//using Eigen::Matrix<_Scalar, _Rows, _Cols>::operator=;
 	virtual ~MyMatrix() = default;
 	
 	virtual void setActualZero();
