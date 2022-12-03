@@ -6,3 +6,7 @@
 # Ignore binary files
 *.exe
 *.o
+
+# Ignore some directories
+build/
+extern/
