@@ -1,4 +1,4 @@
-#include "../include/3hdm/unique_solutions_seeker.h"
+#include "3hdm/unique_solutions_seeker.h"
 
 void UniqueSolutionsSeeker::Item::check(const std::string& group)
 {

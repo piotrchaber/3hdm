@@ -1,4 +1,4 @@
-#include "../../include/3hdm/unique_solutions_seeker.h"
+#include "3hdm/unique_solutions_seeker.h"
 
 void print(UniqueSolution& unique, std::ostream& os = std::cout)
 {

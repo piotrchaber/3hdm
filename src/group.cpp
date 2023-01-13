@@ -1,4 +1,4 @@
-#include "../include/3hdm/group.h"
+#include "3hdm/group.h"
 
 Group::Group(const std::string& structure)
 	: mStructure(structure), mNumberOfGenerators(0)

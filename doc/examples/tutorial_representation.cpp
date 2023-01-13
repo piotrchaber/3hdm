@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../../include/3hdm/representation.h"
+#include "3hdm/representation.h"
 
 void print(const Representation3cd& representation)
 {
