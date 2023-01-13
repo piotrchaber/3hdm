@@ -4,7 +4,7 @@
 #include <fstream>
 #include <vector>
 
-#include "../../extern/eigen/Eigen/Dense"
+#include "Eigen/Dense"
 #include "mymatrix_simpl.h"
 
 template<typename _Scalar, int _Rows, int _Cols>

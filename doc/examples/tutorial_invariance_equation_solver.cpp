@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../../include/3hdm/invariance_equation_solver.h"
+#include "3hdm/invariance_equation_solver.h"
 
 const std::string toString(const std::vector<size_t>& vector, const char& sep = ' ')
 {

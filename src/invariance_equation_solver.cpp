@@ -1,7 +1,7 @@
-#include "../include/3hdm/invariance_equation_solver.h"
+#include "3hdm/invariance_equation_solver.h"
 
-#include "../extern/eigen/Eigen/Eigenvalues"
-#include "../extern/eigen/unsupported/Eigen/KroneckerProduct"
+#include "Eigen/Eigenvalues"
+#include "unsupported/Eigen/KroneckerProduct"
 
 // helper function
 static std::map<char, size_t> findUniqueChars(const std::string& s)

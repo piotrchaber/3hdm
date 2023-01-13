@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../../include/3hdm/mymatrix.h"
+#include "3hdm/mymatrix.h"
 
 int main()
 {

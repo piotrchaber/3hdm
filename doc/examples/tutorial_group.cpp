@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../../include/3hdm/group.h"
+#include "3hdm/group.h"
 
 void print(const Group& group)
 {
