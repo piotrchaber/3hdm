@@ -148,7 +148,7 @@ std::vector<GroupList::Data> GroupList::loadData()
 std::vector<int> GroupList::loadGens()
 {
 	std::fstream ifile;
-	ifile.open("gens.txt", std::ios::in);
+	ifile.open("inputs/gens.txt", std::ios::in);
 	if (ifile.is_open() == false) {
 		std::cerr << "File not opening properly!" << std::endl;
 		exit(EXIT_FAILURE);
@@ -166,7 +166,7 @@ std::vector<int> GroupList::loadGens()
 std::vector<std::string> GroupList::loadStructures()
 {
 	std::fstream ifile;
-	ifile.open("groups.txt", std::ios::in);
+	ifile.open("inputs/groups.txt", std::ios::in);
 	if (ifile.is_open() == false) {
 		std::cerr << "File not opening properly!" << std::endl;
 		exit(EXIT_FAILURE);

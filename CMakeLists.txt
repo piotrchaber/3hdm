@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION 3.5)
 
 project(3hdm LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(3HDM_SOURCE
+    src/group_list.cpp
     src/group.cpp
     src/invariance_equation_solver.cpp
     src/unique_solutions_seeker.cpp
@@ -15,6 +16,10 @@ set(EXAMPLES_DIR
 )
 set(EIGEN_DIR
     ${CMAKE_SOURCE_DIR}/extern/eigen/
+)
+
+set(INPUTS_DIR
+    ${CMAKE_SOURCE_DIR}/inputs/
 )
 
 if(NOT EXISTS ${EIGEN_DIR})
@@ -37,6 +42,11 @@ set_target_properties(${PROJECT_NAME}_lib PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
 )
 
+add_custom_command(TARGET ${PROJECT_NAME}_lib PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${INPUTS_DIR} ${PROJECT_BINARY_DIR}/inputs
+)
+
 function(add_example file_name app_name input_file)
     add_executable(${PROJECT_NAME}_${app_name}
         ${EXAMPLES_DIR}/${file_name}
@@ -56,6 +66,7 @@ function(add_example file_name app_name input_file)
     endif()
 endfunction()
 
+add_example(tutorial_group_list.cpp group_list "")
 add_example(tutorial_group.cpp group tutorial_group)
 add_example(tutorial_invariance_equation_solver.cpp invariance_equation_solver tutorial_group)
 add_example(tutorial_mymatrix.cpp mymatrix tutorial_mymatrix.txt)
