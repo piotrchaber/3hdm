@@ -22,6 +22,10 @@ set(INPUTS_DIR
     ${CMAKE_SOURCE_DIR}/inputs/
 )
 
+set(INPUT_FILES
+    tutorial_group tutorial_mymatrix.txt tutorial_representation.txt
+)
+
 if(NOT EXISTS ${EIGEN_DIR})
     find_package(Git REQUIRED)
     execute_process(
@@ -47,7 +51,13 @@ add_custom_command(TARGET ${PROJECT_NAME}_lib PRE_BUILD
     ${INPUTS_DIR} ${PROJECT_BINARY_DIR}/inputs
 )
 
-function(add_example file_name app_name input_file)
+foreach(input_file IN LISTS INPUT_FILES)
+    configure_file(${EXAMPLES_DIR}/${input_file}
+        ${PROJECT_BINARY_DIR}/
+    )
+endforeach()
+
+function(add_example file_name app_name)
     add_executable(${PROJECT_NAME}_${app_name}
         ${EXAMPLES_DIR}/${file_name}
     )
@@ -59,16 +69,11 @@ function(add_example file_name app_name input_file)
     set_target_properties(${PROJECT_NAME}_${app_name} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
     )
-
-    if(input_file)
-        configure_file(${EXAMPLES_DIR}/${input_file}
-            ${PROJECT_BINARY_DIR}/)
-    endif()
 endfunction()
 
-add_example(tutorial_group_list.cpp group_list "")
-add_example(tutorial_group.cpp group tutorial_group)
-add_example(tutorial_invariance_equation_solver.cpp invariance_equation_solver tutorial_group)
-add_example(tutorial_mymatrix.cpp mymatrix tutorial_mymatrix.txt)
-add_example(tutorial_representation.cpp representation tutorial_representation.txt)
-add_example(tutorial_unique_solutions_seeker.cpp unique_solutions_seeker tutorial_group)
+add_example(tutorial_group_list.cpp group_list)
+add_example(tutorial_group.cpp group)
+add_example(tutorial_invariance_equation_solver.cpp invariance_equation_solver)
+add_example(tutorial_mymatrix.cpp mymatrix)
+add_example(tutorial_representation.cpp representation)
+add_example(tutorial_unique_solutions_seeker.cpp unique_solutions_seeker)
