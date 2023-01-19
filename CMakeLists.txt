@@ -38,7 +38,7 @@ include_directories(
     ${EIGEN_DIR}
 )
 
-add_library(${PROJECT_NAME}_lib SHARED
+add_library(${PROJECT_NAME}_lib STATIC
     ${3HDM_SOURCE}
 )
 

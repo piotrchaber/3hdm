@@ -1,6 +1,19 @@
+#include <fstream>
 #include <iostream>
 
 #include "3hdm/representation.h"
+
+std::filesystem::path findBuildPath()
+{
+	auto buildPath = std::filesystem::current_path();
+	auto buildName = buildPath.filename();
+	while (buildName != "build")
+	{
+		buildPath = buildPath.parent_path();
+		buildName = buildPath.filename();
+	}
+	return buildPath / "";
+}
 
 void print(const Representation3cd& representation)
 {
@@ -23,8 +36,10 @@ int main()
 	//Representation3cd rep(matrices);
 	//print(rep);
 
+	auto buildPath = findBuildPath();
+
 	Representation3cd rep2;
-	rep2.loadFromFile("tutorial_representation.txt");
+	rep2.load("tutorial_representation.txt", buildPath);
 	print(rep2);
 
 	std::cout << "Dimension: " << rep2.dimension() << std::endl;

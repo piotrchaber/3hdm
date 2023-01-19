@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <filesystem>
 #include <fstream>
 #include <vector>
 
@@ -15,8 +16,8 @@ public:
 	virtual ~MyMatrix() = default;
 	
 	virtual void setActualZero();
-	void loadFromStringStream(std::stringstream& ss);
-	void loadFromFile(const std::string& fileName);
+	void load(std::stringstream& ss);
+	void load(const std::string& fileName, const std::string& fileDir);
 };
 
 typedef MyMatrix<std::complex<double>, 2, 2> MyMatrix2cd;
@@ -96,7 +97,7 @@ void MyMatrix<_Scalar, _Rows, _Cols>::setActualZero()
 }
 
 template <typename _Scalar, int _Rows, int _Cols>
-void MyMatrix<_Scalar, _Rows, _Cols>::loadFromStringStream(std::stringstream& ss)
+void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream& ss)
 {
 	if (ss.str() == "") {
 		std::cerr << "Stringstream is empty!" << '\n';
@@ -123,12 +124,13 @@ void MyMatrix<_Scalar, _Rows, _Cols>::loadFromStringStream(std::stringstream& ss
 }
 
 template <typename _Scalar, int _Rows, int _Cols>
-void MyMatrix<_Scalar, _Rows, _Cols>::loadFromFile(const std::string& fileName)
+void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string& fileName, const std::string& fileDir)
 {
+	auto filePath = std::filesystem::path(fileDir + fileName);
 	std::fstream ifile;
-	ifile.open(fileName, std::ios::in);
+	ifile.open(filePath, std::ios::in);
 	if(ifile.is_open() == false) {
-		std::cerr << "File not opening properly!" << '\n';
+		std::cerr << filePath << " file not opening properly!" << '\n';
 		exit(EXIT_FAILURE);
 	}
 	
@@ -138,7 +140,7 @@ void MyMatrix<_Scalar, _Rows, _Cols>::loadFromFile(const std::string& fileName)
 		ss << matrixRow + "\n";
 	}
 	
-	loadFromStringStream(ss);
+	load(ss);
 }
 
 // TODO: loadFromFile method of MyMatrixX class needs to provide any information about matrix dimension
