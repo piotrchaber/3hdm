@@ -22,8 +22,24 @@ void print(const std::vector<GroupList::Data>& groups, const std::string & messa
     }
 }
 
+std::filesystem::path findBuildPath()
+{
+	auto buildPath = std::filesystem::current_path();
+	auto buildName = buildPath.filename();
+	while (buildName != "build")
+	{
+		buildPath = buildPath.parent_path();
+		buildName = buildPath.filename();
+	}
+	return buildPath / "";
+}
+
 int main()
 {
+    auto buildPath = findBuildPath();
+    auto inputsPath = buildPath / "inputs";
+    GroupList::Init(inputsPath);
+
     auto order_24 = GroupList::Order(24);
     print(order_24, "Groups of order 24");
 

@@ -30,7 +30,14 @@ bool GroupList::Data::operator<(const GroupList::Data& right) const
 	return takeOrder(this->structure) < takeOrder(right.structure);
 }
 
-std::vector<GroupList::Data> GroupList::mData = GroupList::loadData();
+std::filesystem::path GroupList::mPath;
+std::vector<GroupList::Data> GroupList::mData;
+
+void GroupList::Init(const std::filesystem::path & path)
+{
+    mPath = path;
+	mData = loadData();
+}
 
 std::vector<GroupList::Data> GroupList::All()
 {
@@ -147,8 +154,9 @@ std::vector<GroupList::Data> GroupList::loadData()
 
 std::vector<int> GroupList::loadGens()
 {
+	auto filePath = mPath / "gens.txt";
 	std::fstream ifile;
-	ifile.open("inputs/gens.txt", std::ios::in);
+	ifile.open(filePath, std::ios::in);
 	if (ifile.is_open() == false) {
 		std::cerr << "File not opening properly!" << std::endl;
 		exit(EXIT_FAILURE);
@@ -165,8 +173,9 @@ std::vector<int> GroupList::loadGens()
 
 std::vector<std::string> GroupList::loadStructures()
 {
+	auto filePath = mPath / "groups.txt";
 	std::fstream ifile;
-	ifile.open("inputs/groups.txt", std::ios::in);
+	ifile.open(filePath, std::ios::in);
 	if (ifile.is_open() == false) {
 		std::cerr << "File not opening properly!" << std::endl;
 		exit(EXIT_FAILURE);
