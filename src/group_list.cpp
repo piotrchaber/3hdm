@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 
@@ -30,10 +31,10 @@ bool GroupList::Data::operator<(const GroupList::Data& right) const
 	return takeOrder(this->structure) < takeOrder(right.structure);
 }
 
-std::filesystem::path GroupList::mPath;
+std::string GroupList::mPath;
 std::vector<GroupList::Data> GroupList::mData;
 
-void GroupList::Init(const std::filesystem::path & path)
+void GroupList::Init(const std::string& path)
 {
     mPath = path;
 	mData = loadData();
@@ -154,7 +155,7 @@ std::vector<GroupList::Data> GroupList::loadData()
 
 std::vector<int> GroupList::loadGens()
 {
-	auto filePath = mPath / "gens.txt";
+	auto filePath = std::filesystem::path(mPath + "/gens.txt");
 	std::fstream ifile;
 	ifile.open(filePath, std::ios::in);
 	if (ifile.is_open() == false) {
@@ -173,7 +174,7 @@ std::vector<int> GroupList::loadGens()
 
 std::vector<std::string> GroupList::loadStructures()
 {
-	auto filePath = mPath / "groups.txt";
+	auto filePath = std::filesystem::path(mPath + "/groups.txt");
 	std::fstream ifile;
 	ifile.open(filePath, std::ios::in);
 	if (ifile.is_open() == false) {

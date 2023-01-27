@@ -1,6 +1,5 @@
 #pragma once
 
-#include <filesystem>
 #include <map>
 #include <string>
 #include <vector>
@@ -15,7 +14,7 @@ public:
 		bool operator<(const Data& right) const;
 	};
 
-	static void Init(const std::filesystem::path & path);
+	static void Init(const std::string& path);
 	static std::vector<Data> All();
 	static std::vector<Data> Order(size_t order);
 	static std::vector<Data> Orders(const std::vector<size_t>& orders);
@@ -31,6 +30,6 @@ protected:
 	static std::vector<std::string> loadStructures();
 
 private:
-	static std::filesystem::path mPath;
+	static std::string mPath;
 	static std::vector<Data> mData;
 };
