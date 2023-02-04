@@ -10,10 +10,10 @@ public:
 	public:
 		virtual ~Item() = default;
 
-		void check(const std::string& group);
-		void check(const MyVectorXcd& phase);
-		const std::string& groups() const;
-		const std::vector<MyVectorXcd>& phases() const;
+		void check(const std::string & group);
+		void check(const MyVectorXcd & phase);
+		const std::string & groups() const;
+		const std::vector<MyVectorXcd> & phases() const;
 
 	private:
 		using MyVectorXcd::MyVectorXcd;
@@ -22,17 +22,17 @@ public:
 	};
 
 	UniqueSolutionsSeeker() = default;
-	UniqueSolutionsSeeker(const Solutions& solutions);
+	explicit UniqueSolutionsSeeker(const Solutions & solutions);
 	virtual ~UniqueSolutionsSeeker() = default;
 
-	void find(const Solution& solution);
-	void find(const Solutions& solutions);
-	const Item& item(size_t ith) const;
-	const std::vector<Item>& items() const;
+	void find(const Solution & solution);
+	void find(const Solutions & solutions);
+	const Item & item(size_t ith) const;
+	const std::vector<Item> & items() const;
 
 protected:
-	void check(const Solution::ConstColXpr& column, const std::string& group);
-	void check(const Solution::ConstColXpr& column, const std::string& group, const MyVectorXcd& phase);
+	void check(const Solution::ConstColXpr & column, const std::string & group);
+	void check(const Solution::ConstColXpr & column, const std::string & group, const MyVectorXcd & phase);
 
 private:
 	std::vector<Item> mItems;

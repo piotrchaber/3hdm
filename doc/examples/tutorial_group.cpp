@@ -13,10 +13,10 @@ std::filesystem::path findBuildPath()
 	return buildPath;
 }
 
-void print(const Group& group)
+void print(const Group & group)
 {
-	for (const auto& rep : group.representations()) {
-		for (const auto& matrix : rep.matrices()) {
+	for (const auto & representation : group.representations()) {
+		for (const auto & matrix : representation.matrices()) {
 			std::cout << matrix << '\n';
 		}
 	}
@@ -27,9 +27,13 @@ int main()
 {
 	using cd = std::complex<double>;
 
-	MyMatrix3cd matrix1; matrix1 << cd(0, 0), cd(1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(1, 0), cd(1, 0), cd(0, 0), cd(0, 0);
-	MyMatrix3cd matrix2; matrix2 << cd(-1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(-1, 0);
-	MyMatrix3cd matrix3; matrix3 << cd(-1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(-1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(1, 0);
+	MyMatrix3cd matrix1;
+	MyMatrix3cd matrix2;
+	MyMatrix3cd matrix3;
+	matrix1 << cd(0, 0), cd(1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(1, 0), cd(1, 0), cd(0, 0), cd(0, 0);
+	matrix2 << cd(-1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(-1, 0);
+	matrix3 << cd(-1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(-1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(1, 0);
+	
 	Representation3cd representation({ matrix1, matrix2, matrix3 });
 
 	Group group;
@@ -64,7 +68,7 @@ int main()
 
 	auto generator = group2.generator(1);
 	std::cout << "1stGeneratorMatrices:" << '\n';
-	for (const auto& matrix : generator) {
+	for (const auto & matrix : generator) {
 		std::cout << matrix << '\n';
 	}
 	std::cout << '\n';

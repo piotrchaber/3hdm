@@ -13,9 +13,9 @@ std::filesystem::path findBuildPath()
 	return buildPath;
 }
 
-void print(const Representation3cd& representation)
+void print(const Representation3cd & representation)
 {
-	for (const auto& matrix : representation.matrices()) {
+	for (const auto & matrix : representation.matrices()) {
 		std::cout << matrix << '\n';
 	}
 	std::cout << '\n';
@@ -27,19 +27,19 @@ int main()
 	MyMatrix3cd matrix2 = MyMatrix3cd::Random();
 	std::vector<MyMatrix3cd> matrices = { matrix1, matrix2 };
 
-	Representation3cd rep;
-	rep.setMatrices(matrices);
-	print(rep);
+	Representation3cd representation;
+	representation.setMatrices(matrices);
+	print(representation);
 
-	//Representation3cd rep(matrices);
-	//print(rep);
+	//Representation3cd representation(matrices);
+	//print(representation);
 
 	auto buildPath = findBuildPath();
 
-	Representation3cd rep2;
-	rep2.load("tutorial_representation.txt", buildPath);
-	print(rep2);
+	Representation3cd representation2;
+	representation2.load("tutorial_representation.txt", buildPath);
+	print(representation2);
 
-	std::cout << "Dimension: " << rep2.dimension() << std::endl;
-	std::cout << "Size: " << rep2.numberOfMatrices() << std::endl;
+	std::cout << "Dimension: " << representation2.dimension() << std::endl;
+	std::cout << "Size: " << representation2.numberOfMatrices() << std::endl;
 }

@@ -13,7 +13,7 @@ std::filesystem::path findBuildPath()
 	return buildPath;
 }
 
-void print(const GroupList::Data& group, const std::string & message = "")
+void print(const GroupList::Data & group, const std::string & message = "")
 {
     if (message.empty() == false) {
         std::cout << message << '\n';
@@ -21,7 +21,7 @@ void print(const GroupList::Data& group, const std::string & message = "")
     std::cout << group.structure << " " << group.gen << '\n';
 }
 
-void print(const std::vector<GroupList::Data>& groups, const std::string & message = "")
+void print(const std::vector<GroupList::Data> & groups, const std::string & message = "")
 {
     if (message.empty() == false) {
         std::cout << message << '\n';

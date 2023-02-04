@@ -6,24 +6,24 @@
 #include <fstream>
 #include <iostream>
 
-static size_t takeStructure(const std::string& group, size_t start)
+static size_t takeStructure(const std::string & group, size_t start)
 {
 	std::string result;
 	while (isdigit(group[++start])) { result += (group[start]); }
 	return stoi(result);
 }
 
-static size_t takeOrder(const std::string& group)
+static size_t takeOrder(const std::string & group)
 {
 	return takeStructure(group, 1);
 }
 
-static size_t takeId(const std::string& group)
+static size_t takeId(const std::string & group)
 {
 	return takeStructure(group, group.find(',') + 1);
 }
 
-bool GroupList::Data::operator<(const GroupList::Data& right) const
+bool GroupList::Data::operator<(const GroupList::Data & right) const
 {
 	if (takeOrder(this->structure) == takeOrder(right.structure)) {
 		return takeId(this->structure) < takeId(right.structure);
@@ -34,7 +34,7 @@ bool GroupList::Data::operator<(const GroupList::Data& right) const
 std::string GroupList::mPath;
 std::vector<GroupList::Data> GroupList::mData;
 
-void GroupList::Init(const std::string& path)
+void GroupList::Init(const std::string & path)
 {
     mPath = path;
 	mData = loadData();
@@ -49,7 +49,7 @@ std::vector<GroupList::Data> GroupList::Order(size_t order)
 {
 	std::vector<Data> result;
 
-	auto found = std::find_if(mData.cbegin(), mData.cend(), [&](const auto& group)
+	auto found = std::find_if(mData.cbegin(), mData.cend(), [&](const auto & group)
 		{ return order == takeOrder(group.structure); });
 	while (found != mData.cend() && takeOrder(found->structure) == order) {
 		result.push_back(*found);
@@ -59,12 +59,12 @@ std::vector<GroupList::Data> GroupList::Order(size_t order)
 	return result;
 }
 
-std::vector<GroupList::Data> GroupList::Orders(const std::vector<size_t>& orders)
+std::vector<GroupList::Data> GroupList::Orders(const std::vector<size_t> & orders)
 {
 	std::vector<Data> result;
 	std::vector<Data> subresult;
 
-	for (auto const& order : orders) {
+	for (auto const & order : orders) {
 		subresult = Order(order);
 		result.insert(result.end(), subresult.begin(), subresult.end());
 	}
@@ -79,7 +79,7 @@ std::vector<GroupList::Data> GroupList::Orders(size_t from, size_t to)
     std::vector<Data> result;
 
 	std::copy_if(mData.cbegin(), mData.cend(), std::back_inserter(result),
-	    [&](const auto& group) {
+	    [&](const auto & group) {
 			return takeOrder(group.structure) >= from && takeOrder(group.structure) < to;
 		});
 
@@ -127,7 +127,7 @@ GroupList::Data GroupList::Structure(size_t order, size_t id)
 {
 	Data result;
 
-	auto found = std::find_if(mData.cbegin(), mData.cend(), [&](const auto& group)
+	auto found = std::find_if(mData.cbegin(), mData.cend(), [&](const auto & group)
 		{ return order == takeOrder(group.structure) && id == takeId(group.structure); });
 	if (found != mData.cend()) {
 		result = *found;
@@ -136,12 +136,12 @@ GroupList::Data GroupList::Structure(size_t order, size_t id)
 	return result;
 }
 
-std::vector<GroupList::Data> GroupList::Structures(const std::vector<std::pair<size_t, size_t>>& structures)
+std::vector<GroupList::Data> GroupList::Structures(const std::vector<std::pair<size_t, size_t>> & structures)
 {
 	std::vector<Data> result;
 	Data subresult;
 
-	for (auto const& structure : structures) {
+	for (auto const & structure : structures) {
 		subresult = Structure(structure.first, structure.second);
 		if (subresult.structure.empty() == false) {
 			result.push_back(subresult);

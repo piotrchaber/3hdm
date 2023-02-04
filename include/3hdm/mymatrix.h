@@ -12,12 +12,11 @@ template<typename _Scalar, int _Rows, int _Cols>
 class MyMatrix : public Eigen::Matrix<_Scalar, _Rows, _Cols> {
 public:
 	using Eigen::Matrix<_Scalar, _Rows, _Cols>::Matrix;
-	//using Eigen::Matrix<_Scalar, _Rows, _Cols>::operator=;
 	virtual ~MyMatrix() = default;
 	
 	virtual void setActualZero();
-	void load(std::stringstream& ss);
-	void load(const std::string& fileName, const std::string& fileDir);
+	void load(std::stringstream & ss);
+	void load(const std::string & fileName, const std::string & fileDir);
 };
 
 typedef MyMatrix<std::complex<double>, 2, 2> MyMatrix2cd;
@@ -97,7 +96,7 @@ void MyMatrix<_Scalar, _Rows, _Cols>::setActualZero()
 }
 
 template <typename _Scalar, int _Rows, int _Cols>
-void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream& ss)
+void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream & ss)
 {
 	if (ss.str() == "") {
 		std::cerr << "Stringstream is empty!" << '\n';
@@ -124,7 +123,7 @@ void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream& ss)
 }
 
 template <typename _Scalar, int _Rows, int _Cols>
-void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string& fileName, const std::string& fileDir)
+void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string & fileName, const std::string & fileDir)
 {
 	auto filePath = std::filesystem::path(fileDir + '/' + fileName);
 	std::fstream ifile;

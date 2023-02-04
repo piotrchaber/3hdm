@@ -11,15 +11,15 @@ class Representation
 {
 public:
 	Representation() = default;
-	explicit Representation(const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>>& matrices);
+	explicit Representation(const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>> & matrices);
 	virtual ~Representation() = default;
 
-	static const int& dimension();
-	void load(const std::string& fileName, const std::string& fileDir);
-	const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>>& matrices() const;
-	const MyMatrix<_Scalar, _Dimension, _Dimension>& matrix(size_t ith) const;
+	static const int & dimension();
+	void load(const std::string & fileName, const std::string & fileDir);
+	const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>> & matrices() const;
+	const MyMatrix<_Scalar, _Dimension, _Dimension> & matrix(size_t ith) const;
 	size_t numberOfMatrices() const;
-	void setMatrices(const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>>& matrices);
+	void setMatrices(const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>> & matrices);
 
 protected:
 	void checkDimension();
@@ -53,20 +53,20 @@ template <typename _Scalar, int _Dimension>
 int Representation<_Scalar, _Dimension>::mDimension = _Dimension == Eigen::Dynamic ? 0 : _Dimension;
 
 template <typename _Scalar, int _Dimension>
-Representation<_Scalar, _Dimension>::Representation(const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>>& matrices)
+Representation<_Scalar, _Dimension>::Representation(const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>> & matrices)
 	: mMatrices(matrices)
 {
 	checkDimension();
 }
 
 template <typename _Scalar, int _Dimension>
-const int& Representation<_Scalar, _Dimension>::dimension()
+const int & Representation<_Scalar, _Dimension>::dimension()
 {
 	return mDimension;
 }
 
 template <typename _Scalar, int _Dimension>
-void Representation<_Scalar, _Dimension>::load(const std::string& fileName, const std::string& fileDir)
+void Representation<_Scalar, _Dimension>::load(const std::string & fileName, const std::string & fileDir)
 {
 	auto filePath = std::filesystem::path(fileDir + '/' + fileName);
 	std::fstream ifile;
@@ -95,13 +95,13 @@ void Representation<_Scalar, _Dimension>::load(const std::string& fileName, cons
 }
 
 template <typename _Scalar, int _Dimension>
-const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>>& Representation<_Scalar, _Dimension>::matrices() const
+const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>> & Representation<_Scalar, _Dimension>::matrices() const
 {
 	return mMatrices;
 }
 
 template<typename _Scalar, int _Dimension>
-const MyMatrix<_Scalar, _Dimension, _Dimension>& Representation<_Scalar, _Dimension>::matrix(size_t ith) const
+const MyMatrix<_Scalar, _Dimension, _Dimension> & Representation<_Scalar, _Dimension>::matrix(size_t ith) const
 {
 	return mMatrices.at(ith);
 }
@@ -113,7 +113,7 @@ size_t Representation<_Scalar, _Dimension>::numberOfMatrices() const
 }
 
 template <typename _Scalar, int _Dimension>
-void Representation<_Scalar, _Dimension>::setMatrices(const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>>& matrices)
+void Representation<_Scalar, _Dimension>::setMatrices(const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>> & matrices)
 {
 	mMatrices = matrices;
 	checkDimension();
@@ -126,9 +126,9 @@ void Representation<_Scalar, _Dimension>::checkDimension()
 		int cols = mMatrices.front().cols();
 		int rows = mMatrices.front().rows();
 		assert(cols == rows && "Matrix representation must be square");
-		std::for_each(mMatrices.cbegin() + 1, mMatrices.cend(), [&](const auto& matrix)
-			{ assert(cols == matrix.cols() && rows == matrix.rows()
-				&& "All matrices must be of the same dimension"); });
+		std::for_each(mMatrices.cbegin() + 1, mMatrices.cend(), [&](const auto & matrix) {
+			assert(cols == matrix.cols() && rows == matrix.rows()
+			&& "All matrices must be of the same dimension"); });
 		mDimension = cols;
 	}
 }
