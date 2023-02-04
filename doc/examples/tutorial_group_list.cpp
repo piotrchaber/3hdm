@@ -3,6 +3,16 @@
 
 #include "3hdm/group_list.h"
 
+std::filesystem::path findBuildPath()
+{
+	auto buildPath = std::filesystem::current_path();
+	while (buildPath.filename() != "build")
+	{
+		buildPath = buildPath.parent_path();
+	}
+	return buildPath;
+}
+
 void print(const GroupList::Data& group, const std::string & message = "")
 {
     if (message.empty() == false) {
@@ -21,18 +31,6 @@ void print(const std::vector<GroupList::Data>& groups, const std::string & messa
     {
         print(group);
     }
-}
-
-std::filesystem::path findBuildPath()
-{
-	auto buildPath = std::filesystem::current_path();
-	auto buildName = buildPath.filename();
-	while (buildName != "build")
-	{
-		buildPath = buildPath.parent_path();
-		buildName = buildPath.filename();
-	}
-	return buildPath / "";
 }
 
 int main()

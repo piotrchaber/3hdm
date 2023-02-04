@@ -6,13 +6,11 @@
 std::filesystem::path findBuildPath()
 {
 	auto buildPath = std::filesystem::current_path();
-	auto buildName = buildPath.filename();
-	while (buildName != "build")
+	while (buildPath.filename() != "build")
 	{
 		buildPath = buildPath.parent_path();
-		buildName = buildPath.filename();
 	}
-	return buildPath / "";
+	return buildPath;
 }
 
 void print(const Representation3cd& representation)

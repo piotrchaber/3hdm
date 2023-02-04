@@ -40,7 +40,7 @@ void Group::load(const std::string& fileDir)
 
 void Group::load(const std::string& fileName, const std::string& fileDir)
 {
-	auto filePath = std::filesystem::path(fileDir + fileName);
+	auto filePath = std::filesystem::path(fileDir + '/' + fileName);
 	std::fstream ifile;
 	ifile.open(filePath, std::ios::in);
 	if (ifile.is_open() == false) {

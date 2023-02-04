@@ -6,13 +6,11 @@
 std::filesystem::path findBuildPath()
 {
 	auto buildPath = std::filesystem::current_path();
-	auto buildName = buildPath.filename();
-	while (buildName != "build")
+	while (buildPath.filename() != "build")
 	{
 		buildPath = buildPath.parent_path();
-		buildName = buildPath.filename();
 	}
-	return buildPath / "";
+	return buildPath;
 }
 
 const std::string toString(const std::vector<size_t>& vector, const char& sep = ' ')

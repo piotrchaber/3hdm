@@ -68,7 +68,7 @@ const int& Representation<_Scalar, _Dimension>::dimension()
 template <typename _Scalar, int _Dimension>
 void Representation<_Scalar, _Dimension>::load(const std::string& fileName, const std::string& fileDir)
 {
-	auto filePath = std::filesystem::path(fileDir + fileName);
+	auto filePath = std::filesystem::path(fileDir + '/' + fileName);
 	std::fstream ifile;
 	ifile.open(filePath, std::ios::in);
 	if (ifile.is_open() == false) {

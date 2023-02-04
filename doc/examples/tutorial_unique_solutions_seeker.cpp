@@ -5,13 +5,11 @@
 std::filesystem::path findBuildPath()
 {
 	auto buildPath = std::filesystem::current_path();
-	auto buildName = buildPath.filename();
-	while (buildName != "build")
+	while (buildPath.filename() != "build")
 	{
 		buildPath = buildPath.parent_path();
-		buildName = buildPath.filename();
 	}
-	return buildPath / "";
+	return buildPath;
 }
 
 void print(UniqueSolution& unique, std::ostream& os = std::cout)
@@ -54,7 +52,7 @@ int main()
 	ussp.find(solutions);
 	UniqueSolutions usp;
 	usp = ussp.items();
-	std::cout << "Uniques particular solutions:" << '\n';
+	std::cout << "Unique particular solutions:" << '\n';
 	print(usp);
 
 	for (auto& solution : solutions) {
@@ -65,6 +63,6 @@ int main()
 	ussg.find(solutions);
 	UniqueSolutions usg;
 	usg = ussg.items();
-	std::cout << "Uniques general solutions:" << '\n';
+	std::cout << "Unique general solutions:" << '\n';
 	print(usg);
 }

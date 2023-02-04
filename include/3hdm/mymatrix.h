@@ -126,7 +126,7 @@ void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream& ss)
 template <typename _Scalar, int _Rows, int _Cols>
 void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string& fileName, const std::string& fileDir)
 {
-	auto filePath = std::filesystem::path(fileDir + fileName);
+	auto filePath = std::filesystem::path(fileDir + '/' + fileName);
 	std::fstream ifile;
 	ifile.open(filePath, std::ios::in);
 	if(ifile.is_open() == false) {

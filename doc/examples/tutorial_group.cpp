@@ -3,6 +3,16 @@
 
 #include "3hdm/group.h"
 
+std::filesystem::path findBuildPath()
+{
+	auto buildPath = std::filesystem::current_path();
+	while (buildPath.filename() != "build")
+	{
+		buildPath = buildPath.parent_path();
+	}
+	return buildPath;
+}
+
 void print(const Group& group)
 {
 	for (const auto& rep : group.representations()) {
@@ -11,18 +21,6 @@ void print(const Group& group)
 		}
 	}
 	std::cout << '\n';
-}
-
-std::filesystem::path findBuildPath()
-{
-	auto buildPath = std::filesystem::current_path();
-	auto buildName = buildPath.filename();
-	while (buildName != "build")
-	{
-		buildPath = buildPath.parent_path();
-		buildName = buildPath.filename();
-	}
-	return buildPath / "";
 }
 
 int main()
