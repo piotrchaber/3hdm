@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MYMATRIXSIMPL_H
+#define MYMATRIXSIMPL_H
 
 template <typename Object, bool isComplex>
 struct setActualZeroImpl
@@ -38,3 +39,5 @@ void setActualZeroImpl<Object, true>::operator()(Object & object)
 		}
 	}
 }
+
+#endif // MYMATRIXSIMPL_H

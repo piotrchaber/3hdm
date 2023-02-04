@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UNIQUESOLUTIONSSEEKER_H
+#define UNIQUESOLUTIONSSEEKER_H
 
 #include "invariance_equation_solver.h"
 
@@ -40,3 +41,5 @@ private:
 
 typedef UniqueSolutionsSeeker::Item UniqueSolution;
 typedef std::vector<UniqueSolution> UniqueSolutions;
+
+#endif // UNIQUESOLUTIONSSEEKER_H

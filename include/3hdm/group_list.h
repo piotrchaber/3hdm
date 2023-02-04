@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GROUPLIST_H
+#define GROUPLIST_H
 
 #include <map>
 #include <string>
@@ -34,3 +35,5 @@ private:
 	static std::string mPath;
 	static std::vector<Data> mData;
 };
+
+#endif // GROUPLIST_H

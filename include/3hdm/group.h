@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GROUP_H
+#define GROUP_H
 
 #include <string>
 #include <vector>
@@ -32,3 +33,5 @@ private:
 	std::string mStructure;
 	size_t mNumberOfGenerators;
 };
+
+#endif // GROUP_H

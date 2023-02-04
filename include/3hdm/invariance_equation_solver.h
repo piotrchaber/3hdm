@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INVARIANCEEQUATIONSOLVER_H
+#define INVARIANCEEQUATIONSOLVER_H
 
 #include <map>
 #include <string>
@@ -88,3 +89,5 @@ private:
 typedef InvarianceEquationSolver::Particles Particles;
 typedef InvarianceEquationSolver::Solution Solution;
 typedef std::vector<InvarianceEquationSolver::Solution> Solutions;
+
+#endif // INVARIANCEEQUATIONSOLVER_H

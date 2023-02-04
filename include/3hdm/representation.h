@@ -1,4 +1,5 @@
-#pragma once
+#ifndef REPRESENTATION_H
+#define REPRESENTATION_H
 
 #include <filesystem>
 #include <string>
@@ -132,5 +133,7 @@ void Representation<_Scalar, _Dimension>::checkDimension()
 		mDimension = cols;
 	}
 }
+
+#endif // REPRESENTATION_H
 
 // TODO: loadFromFile method for RepresentationX class needs to provide any information about dimension (solution: introduce ctr with dimension as an argument)

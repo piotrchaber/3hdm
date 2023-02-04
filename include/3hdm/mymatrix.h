@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MYMATRIX_H
+#define MYMATRIX_H
 
 #include <iostream>
 #include <filesystem>
@@ -141,5 +142,7 @@ void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string & fileName, const s
 	
 	load(ss);
 }
+
+#endif // MYMATRIX_H
 
 // TODO: loadFromFile method of MyMatrixX class needs to provide any information about matrix dimension
