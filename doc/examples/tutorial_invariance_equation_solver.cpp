@@ -1,6 +1,19 @@
+#include <filesystem>
 #include <iostream>
 
 #include "3hdm/invariance_equation_solver.h"
+
+std::filesystem::path findBuildPath()
+{
+	auto buildPath = std::filesystem::current_path();
+	auto buildName = buildPath.filename();
+	while (buildName != "build")
+	{
+		buildPath = buildPath.parent_path();
+		buildName = buildPath.filename();
+	}
+	return buildPath / "";
+}
 
 const std::string toString(const std::vector<size_t>& vector, const char& sep = ' ')
 {
@@ -39,8 +52,9 @@ void print(Solutions& solutions)
 
 int main()
 {
+	auto buildPath = findBuildPath();
 	Group group("tutorial_group", 2);
-	group.loadFromFile();
+	group.load(buildPath);
 
 	InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular);
 	ies.compute(group);

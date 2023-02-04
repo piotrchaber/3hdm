@@ -1,5 +1,7 @@
 #include "3hdm/group.h"
 
+#include <filesystem>
+
 Group::Group(const std::string& structure)
 	: mStructure(structure), mNumberOfGenerators(0)
 {
@@ -31,12 +33,18 @@ std::vector<MyMatrix3cd> Group::generator(size_t ith) const
 	return result;
 }
 
-void Group::loadFromFile(const std::string& fileDir, const std::string& fileName)
+void Group::load(const std::string& fileDir)
 {
+    load(mStructure, fileDir);
+}
+
+void Group::load(const std::string& fileName, const std::string& fileDir)
+{
+	auto filePath = std::filesystem::path(fileDir + fileName);
 	std::fstream ifile;
-	ifile.open(fileDir + (fileName.empty() ? mStructure : fileName), std::ios::in);
+	ifile.open(filePath, std::ios::in);
 	if (ifile.is_open() == false) {
-		std::cerr << "File not opening properly!" << std::endl;
+		std::cerr << filePath << " file not opening properly!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -49,10 +57,10 @@ void Group::loadFromFile(const std::string& fileDir, const std::string& fileName
 
 	mRepresentations.clear();
 	while (std::getline(ifile, matrixRow)) {
-		ss << matrixRow + "\n";
+		ss << matrixRow + '\n';
 		if (++dimController == 3) {
 			++genController;
-			matrix.loadFromStringStream(ss);
+			matrix.load(ss);
 			matrices.push_back(matrix);
 			ss.str(std::string());
 			ss.clear();

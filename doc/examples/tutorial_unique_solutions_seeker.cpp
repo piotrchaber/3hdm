@@ -1,4 +1,18 @@
+#include <filesystem>
+
 #include "3hdm/unique_solutions_seeker.h"
+
+std::filesystem::path findBuildPath()
+{
+	auto buildPath = std::filesystem::current_path();
+	auto buildName = buildPath.filename();
+	while (buildName != "build")
+	{
+		buildPath = buildPath.parent_path();
+		buildName = buildPath.filename();
+	}
+	return buildPath / "";
+}
 
 void print(UniqueSolution& unique, std::ostream& os = std::cout)
 {
@@ -28,8 +42,10 @@ void print(UniqueSolutions& uniques, std::ostream& os = std::cout)
 
 int main()
 {
+	auto buildPath = findBuildPath();
+
 	Group group("tutorial_group", 2);
-	group.loadFromFile();
+	group.load(buildPath);
 
 	InvarianceEquationSolver ies(group, Particles::ChargedLeptons, Solution::Form::Particular);
 	Solutions solutions = ies.solutions();

@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <iostream>
 
 #include "3hdm/group.h"
@@ -10,6 +11,18 @@ void print(const Group& group)
 		}
 	}
 	std::cout << '\n';
+}
+
+std::filesystem::path findBuildPath()
+{
+	auto buildPath = std::filesystem::current_path();
+	auto buildName = buildPath.filename();
+	while (buildName != "build")
+	{
+		buildPath = buildPath.parent_path();
+		buildName = buildPath.filename();
+	}
+	return buildPath / "";
 }
 
 int main()
@@ -34,15 +47,17 @@ int main()
 
 	//Group group({ representation }, "[ 12, 3 ]", 3);
 
-	Group group2("[ 21, 1 ]", 2);
-	group2.loadFromFile("", "tutorial_group");
+	auto buildPath = findBuildPath();
+
+	/*Group group2("[ 21, 1 ]", 2);
+	group2.load("tutorial_group", buildPath);
+	std::cout << "Group representations:" << '\n';
+	print(group2);*/
+
+	Group group2("tutorial_group", 2);
+	group2.load(buildPath);
 	std::cout << "Group representations:" << '\n';
 	print(group2);
-
-	//Group group2("tutorial_group", 2);
-	//group2.loadFromFile();
-	//std::cout << "Group representations:" << '\n';
-	//print(group2);
 
 	std::cout << "GroupStructure: " << group2.structure() << '\n';
 	std::cout << "GeneratorsNumber: " << group2.numberOfGenerators() << '\n';

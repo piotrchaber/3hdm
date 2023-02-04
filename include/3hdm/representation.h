@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -14,7 +15,7 @@ public:
 	virtual ~Representation() = default;
 
 	static const int& dimension();
-	void loadFromFile(const std::string& fileName);
+	void load(const std::string& fileName, const std::string& fileDir);
 	const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>>& matrices() const;
 	const MyMatrix<_Scalar, _Dimension, _Dimension>& matrix(size_t ith) const;
 	size_t numberOfMatrices() const;
@@ -65,12 +66,13 @@ const int& Representation<_Scalar, _Dimension>::dimension()
 }
 
 template <typename _Scalar, int _Dimension>
-void Representation<_Scalar, _Dimension>::loadFromFile(const std::string& fileName)
+void Representation<_Scalar, _Dimension>::load(const std::string& fileName, const std::string& fileDir)
 {
+	auto filePath = std::filesystem::path(fileDir + fileName);
 	std::fstream ifile;
-	ifile.open(fileName, std::ios::in);
+	ifile.open(filePath, std::ios::in);
 	if (ifile.is_open() == false) {
-		std::cerr << "File not opening properly!" << std::endl;
+		std::cerr << filePath << " file not opening properly!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -83,7 +85,7 @@ void Representation<_Scalar, _Dimension>::loadFromFile(const std::string& fileNa
 	while (std::getline(ifile, matrixRow)) {
 		ss << matrixRow + "\n";
 		if (++dimController == _Dimension) {
-			matrix.loadFromStringStream(ss);
+			matrix.load(ss);
 			mMatrices.push_back(matrix);
 			ss.str(std::string());
 			ss.clear();
