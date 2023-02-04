@@ -73,7 +73,7 @@ void Representation<_Scalar, _Dimension>::load(const std::string & fileName, con
 	std::fstream ifile;
 	ifile.open(filePath, std::ios::in);
 	if (ifile.is_open() == false) {
-		std::cerr << filePath << " file not opening properly!" << std::endl;
+		std::cerr << filePath << " file not opening properly!" << '\n';
 		exit(EXIT_FAILURE);
 	}
 

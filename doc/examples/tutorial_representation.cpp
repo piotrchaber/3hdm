@@ -40,6 +40,6 @@ int main()
 	representation2.load("tutorial_representation.txt", buildPath);
 	print(representation2);
 
-	std::cout << "Dimension: " << representation2.dimension() << std::endl;
-	std::cout << "Size: " << representation2.numberOfMatrices() << std::endl;
+	std::cout << "Dimension: " << representation2.dimension() << '\n';
+	std::cout << "Size: " << representation2.numberOfMatrices() << '\n';
 }
