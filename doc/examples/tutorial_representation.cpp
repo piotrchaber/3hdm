@@ -44,6 +44,4 @@ int main()
 
 	std::cout << "Dimension: " << rep2.dimension() << std::endl;
 	std::cout << "Size: " << rep2.numberOfMatrices() << std::endl;
-	
-	return EXIT_SUCCESS;
 }

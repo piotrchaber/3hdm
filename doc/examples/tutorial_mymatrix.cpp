@@ -31,6 +31,4 @@ int main()
 	MyMatrix3cf matrixfile;
 	matrixfile.load("tutorial_mymatrix.txt", buildPath);
 	std::cout << matrixfile << '\n';
-
-	return EXIT_SUCCESS;
 }

@@ -64,6 +64,4 @@ int main()
 
     auto selected_groups = GroupList::Structures({{21, 1}, {24, 3}});
     print(selected_groups, "Selected groups");
-    
-    return EXIT_SUCCESS;
 }

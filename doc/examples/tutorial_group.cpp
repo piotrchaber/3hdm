@@ -70,6 +70,4 @@ int main()
 		std::cout << matrix << '\n';
 	}
 	std::cout << '\n';
-
-	return EXIT_SUCCESS;
 }

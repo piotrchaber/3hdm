@@ -67,6 +67,4 @@ int main()
 	usg = ussg.items();
 	std::cout << "Uniques general solutions:" << '\n';
 	print(usg);
-
-	return EXIT_SUCCESS;
 }

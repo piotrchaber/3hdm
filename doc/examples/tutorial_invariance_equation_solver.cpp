@@ -73,6 +73,4 @@ int main()
 	//InvarianceEquationSolver ies(group, {1, 1, 1}, Particles::ChargedLeptons, Solution::Form::Particular);
 	//Solution solution = ies.solution();
 	//print(solution);
-
-	return EXIT_SUCCESS;
 }
