@@ -47,6 +47,9 @@ int main()
     auto orders_21_24 = GroupList::Orders({21, 24});
     print(orders_21_24, "Groups of order 21 and 24");
 
+    auto orders_from_24_to_45 = GroupList::Orders(24, 45);
+    print(orders_from_24_to_45, "Groups of order from 24 to 45");
+
     auto random_group = GroupList::Random();
     print(random_group, "Random group");
 

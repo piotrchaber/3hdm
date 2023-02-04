@@ -72,6 +72,20 @@ std::vector<GroupList::Data> GroupList::Orders(const std::vector<size_t>& orders
 	return result;
 }
 
+std::vector<GroupList::Data> GroupList::Orders(size_t from, size_t to)
+{
+    assert(from <= to && "The lower limit is greater than the upper one");
+
+    std::vector<Data> result;
+
+	std::copy_if(mData.cbegin(), mData.cend(), std::back_inserter(result),
+	    [&](const auto& group) {
+			return takeOrder(group.structure) >= from && takeOrder(group.structure) < to;
+		});
+
+	return result;
+}
+
 GroupList::Data GroupList::Random()
 {
 	srand(static_cast<unsigned int>(time(nullptr)));

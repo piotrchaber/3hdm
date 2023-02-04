@@ -18,6 +18,7 @@ public:
 	static std::vector<Data> All();
 	static std::vector<Data> Order(size_t order);
 	static std::vector<Data> Orders(const std::vector<size_t>& orders);
+	static std::vector<Data> Orders(size_t from, size_t to);
 	static Data Random();
 	static std::vector<Data> Random(size_t howMany);
 	static std::vector<Data> Range(size_t first, size_t length);
