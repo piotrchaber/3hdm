@@ -15,7 +15,8 @@ std::filesystem::path findBuildPath()
 
 void print(const Representation3cd & representation)
 {
-	for (const auto & matrix : representation.matrices()) {
+	for (const auto & matrix : representation.matrices())
+	{
 		std::cout << matrix << '\n';
 	}
 	std::cout << '\n';

@@ -16,7 +16,8 @@ std::filesystem::path findBuildPath()
 const std::string toString(const std::vector<size_t> & vector, const char & sep = ' ')
 {
 	std::string result;
-	for (size_t i = 0; i < vector.size(); ++i) {
+	for (size_t i = 0; i < vector.size(); ++i)
+	{
 		result += (i == vector.size() - 1) ? std::to_string(vector[i]) : std::to_string(vector[i]) + sep;
 	}
 	return result;
@@ -38,7 +39,8 @@ void print(Solutions & solutions)
 	const Eigen::IOFormat fmtMatrix(6, Eigen::DontAlignCols, " ", "\n", "[", "]");
 
 	std::cout << (solutions.front()).origin().group << '\n';
-	for (auto & solution : solutions) {
+	for (auto & solution : solutions)
+	{
 		solution.setActualZero();
 		std::cout << toString(solution.origin().combination, 'x') << " "
 			<< std::boolalpha << solution.isGood() << '\n'

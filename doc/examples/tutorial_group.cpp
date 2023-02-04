@@ -15,8 +15,10 @@ std::filesystem::path findBuildPath()
 
 void print(const Group & group)
 {
-	for (const auto & representation : group.representations()) {
-		for (const auto & matrix : representation.matrices()) {
+	for (const auto & representation : group.representations())
+	{
+		for (const auto & matrix : representation.matrices())
+		{
 			std::cout << matrix << '\n';
 		}
 	}
@@ -68,7 +70,8 @@ int main()
 
 	auto generator = group2.generator(1);
 	std::cout << "1stGeneratorMatrices:" << '\n';
-	for (const auto & matrix : generator) {
+	for (const auto & matrix : generator)
+	{
 		std::cout << matrix << '\n';
 	}
 	std::cout << '\n';

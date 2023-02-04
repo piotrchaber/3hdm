@@ -15,11 +15,13 @@ static std::vector<size_t> extendCombination(const std::string & shape, const st
 	std::vector<size_t> result(shape.size());
 
 	int i = 0;
-	for (auto & uniqueChar : uniqueChars) {
+	for (auto & uniqueChar : uniqueChars)
+	{
 		uniqueChar.second = combination[i++];
 	}
 
-	for (size_t i = 0; i < shape.size(); ++i) {
+	for (size_t i = 0; i < shape.size(); ++i)
+	{
 		result[i] = uniqueChars[shape[i]];
 	}
 
@@ -32,8 +34,10 @@ static void extractColumnAndPhase(MyMatrixXcd::ColXpr & column, MyVectorXcd & ph
 	phase.resize(nonZeroElements == 0 ? nonZeroElements : nonZeroElements - 1);
 
 	int i = column.size() - 1;
-	while (nonZeroElements > 1) {
-		if (abs(column[i]) > 0.00001) {
+	while (nonZeroElements > 1)
+	{
+		if (abs(column[i]) > 0.00001)
+		{
 			phase[nonZeroElements - 2] = column[i];
 			column[i] = { 1.0,0.0 };
 			--nonZeroElements;
@@ -58,7 +62,8 @@ static void setFirstElementTo(MyMatrixXcd::ColXpr & column, const std::complex<d
 	auto firstNonZeroElement = [&](const auto & block) { return *std::find_if(block.cbegin(), block.cend(), isNonZero); };
 	auto isFirstNonZeroElementEqual = [&](const auto & block) { return abs(firstNonZeroElement(block) - value) < 0.000001; };
 
-	for (auto && col : column.colwise()) {
+	for (auto && col : column.colwise())
+	{
 		if (isZero(col) || isFirstNonZeroElementEqual(col)) { break; }
 		col = (value / firstNonZeroElement(col)) * col;
 	}
@@ -67,13 +72,15 @@ static void setFirstElementTo(MyMatrixXcd::ColXpr & column, const std::complex<d
 static void sortByIndex(MyMatrixXcd::ColXpr & column)
 {
 	std::vector<MyVectorXcd> subvectors;
-	for (int i = 0; i < column.size(); i += 9) {
+	for (int i = 0; i < column.size(); i += 9)
+	{
 		subvectors.push_back(column.segment(i, 9));
 	}
 	
 	std::sort(subvectors.begin(), subvectors.end(), indexCompare);
 
-	for (int i = 0; i < column.size(); i += 9) {
+	for (int i = 0; i < column.size(); i += 9)
+	{
 		column.segment(i, 9) = subvectors[i/9];
 	}
 }
@@ -101,7 +108,8 @@ int InvarianceEquationSolver::Solution::phases() const
 void InvarianceEquationSolver::Solution::setActualZero()
 {
 	MyMatrixXcd::setActualZero();
-	for (auto & phase : mPhases) {
+	for (auto & phase : mPhases)
+	{
 		phase.setActualZero();
 	}
 }
@@ -109,10 +117,12 @@ void InvarianceEquationSolver::Solution::setActualZero()
 void InvarianceEquationSolver::Solution::switchForm()
 {
 	*this = mOriginalForm;
-	if (mForm == Form::Particular) {
+	if (mForm == Form::Particular)
+	{
 		takeGeneralForm();
 	}
-	if (mForm == Form::General) {
+	if (mForm == Form::General)
+	{
 		takeParticularForm();
 	}
 }
@@ -121,21 +131,24 @@ void InvarianceEquationSolver::Solution::extractColumnAndPhase()
 {
 	mPhases.resize(cols());
 	int i = 0;
-	for (auto && col : colwise()) {
+	for (auto && col : colwise())
+	{
 		::extractColumnAndPhase(col, mPhases[i++]);
 	}
 }
 
 void InvarianceEquationSolver::Solution::setFirstElementTo(const std::complex<double> & value)
 {
-	for (auto && col : colwise()) {
+	for (auto && col : colwise())
+	{
 		::setFirstElementTo(col, value);
 	}
 }
 
 void InvarianceEquationSolver::Solution::sortByIndex()
 {
-	for (auto && col : colwise()) {
+	for (auto && col : colwise())
+	{
 		::sortByIndex(col);
 	}
 }
@@ -180,16 +193,20 @@ void InvarianceEquationSolver::compute(const Group & group)
 	int index = uniqueCoeffs.size() - 1;
 
 	mIntersectionBases.clear();
-	while (true) {
+	while (true)
+	{
 		extendedCombination = extendCombination(mShape, partialCombination, uniqueCoeffs);
 		compute(group, extendedCombination);
-		if (mEquationState == EquationState::NoProblem) {
+		if (mEquationState == EquationState::NoProblem)
+		{
 			mIntersectionBases.push_back(mIntersectionBasis);
 		}
 
 		partialCombination[index]++;
-		while (partialCombination[index] == group.numberOfRepresentations() + 1) {
-			if (index == 0) {
+		while (partialCombination[index] == group.numberOfRepresentations() + 1)
+		{
+			if (index == 0)
+			{
 				reset();
 				return;
 			}
@@ -207,14 +224,17 @@ void InvarianceEquationSolver::compute(const Group & group, const std::vector<si
 	findEigenvectors1();
 	findIntersectionBasis();
 
-	if (mEquationState == EquationState::NoProblem) {
+	if (mEquationState == EquationState::NoProblem)
+	{
 		mIntersectionBasis.mOriginalForm = mIntersectionBasis;
 		mIntersectionBasis.mOrigin = { group.structure(), combination };
 		mIntersectionBasis.mIsGood = checkSolution();
-		if (mIntersectionBasis.mForm == Form::Particular) {
+		if (mIntersectionBasis.mForm == Form::Particular)
+		{
 			mIntersectionBasis.takeParticularForm();
 		}
-		if (mIntersectionBasis.mForm == Form::General) {
+		if (mIntersectionBasis.mForm == Form::General)
+		{
 			mIntersectionBasis.takeGeneralForm();
 		}
 	}
@@ -242,9 +262,12 @@ const std::vector<InvarianceEquationSolver::Solution> & InvarianceEquationSolver
 
 bool InvarianceEquationSolver::checkSolution() const
 {
-	for (const auto & solution : mIntersectionBasis.colwise()) {
-		for (const auto & invarianceMatrix : mInvarianceMatrices) {
-			if ((invarianceMatrix * solution).isApprox(solution, 0.0001) == false) {
+	for (const auto & solution : mIntersectionBasis.colwise())
+	{
+		for (const auto & invarianceMatrix : mInvarianceMatrices)
+		{
+			if ((invarianceMatrix * solution).isApprox(solution, 0.0001) == false)
+			{
 				return false;
 			}
 		}
@@ -262,15 +285,18 @@ void InvarianceEquationSolver::findEigenvector1(const MyMatrixXcd & matrix)
 	size_t numberOfEigenvector1 = 0;
 	bool isEigenvalue1 = false;
 
-	for (int i = 0; i < (ces.eigenvalues()).size(); ++i) {
+	for (int i = 0; i < (ces.eigenvalues()).size(); ++i)
+	{
 		isEigenvalue1 = (abs(real(ces.eigenvalues()[i]) - 1.0) < 0.0001) && (abs(imag(ces.eigenvalues()[i])) < 0.0001);
-		if (isEigenvalue1) {
+		if (isEigenvalue1)
+		{
 			eigenvector1.col(numberOfEigenvector1) = (ces.eigenvectors()).col(i);
 			++numberOfEigenvector1;
 		}
 	}
 
-	if (numberOfEigenvector1 == 0) {
+	if (numberOfEigenvector1 == 0)
+	{
 		mEquationState = EquationState::NoEigenvectors;
 		mEigenvectors1.clear();
 		return;
@@ -283,7 +309,8 @@ void InvarianceEquationSolver::findEigenvector1(const MyMatrixXcd & matrix)
 void InvarianceEquationSolver::findEigenvectors1()
 {
 	size_t invarianceMatrixNumber = 0;
-	do {
+	do
+	{
 		findEigenvector1(mInvarianceMatrices[invarianceMatrixNumber]);
 		++invarianceMatrixNumber;
 	} while ((mEquationState != EquationState::NoEigenvectors) && invarianceMatrixNumber < mInvarianceMatrices.size());
@@ -295,7 +322,8 @@ void InvarianceEquationSolver::findIntersectionBasis()
 
 	size_t eigenspaceNumber = 1;
 	mIntersectionBasis = mEigenvectors1[0];
-	do {
+	do
+	{
 		findIntersectionBasis(mIntersectionBasis, mEigenvectors1[eigenspaceNumber]);
 		++eigenspaceNumber;
 	} while ((mEquationState != EquationState::NoEigensubspace) && (eigenspaceNumber < mEigenvectors1.size()));
@@ -307,7 +335,8 @@ void InvarianceEquationSolver::findIntersectionBasis(const MyMatrixXcd & matrix1
 	matrixOf2Eigenspaces << matrix1, -1.0 * matrix2;
 
 	Eigen::FullPivLU<Eigen::MatrixXcd> lu(matrixOf2Eigenspaces);
-	if (!lu.dimensionOfKernel()) {
+	if (!lu.dimensionOfKernel())
+	{
 		mEquationState = EquationState::NoEigensubspace;
 		mIntersectionBasis.resize(0, 0);
 		return;
@@ -317,9 +346,11 @@ void InvarianceEquationSolver::findIntersectionBasis(const MyMatrixXcd & matrix1
 	MyMatrixXcd intersectionBasis(matrix1.rows(), nullSpace.cols());
 	MyVectorXcd baseVector;
 
-	for (int i = 0; i < nullSpace.cols(); ++i) {
+	for (int i = 0; i < nullSpace.cols(); ++i)
+	{
 		baseVector.setZero(matrix1.rows());
-		for (int j = 0; j < matrix1.cols(); ++j) {
+		for (int j = 0; j < matrix1.cols(); ++j)
+		{
 			baseVector += nullSpace.col(i)(j) * (matrix1).col(j);
 		}
 		intersectionBasis.col(i) = baseVector;
@@ -332,8 +363,10 @@ void InvarianceEquationSolver::generateInvarianceMatrices(const Group & group, c
 {
 	std::vector<MyMatrix3cd> matrices;
 
-	for (size_t i = 1; i <= group.numberOfGenerators(); ++i) {
-		for (size_t c : combination) {
+	for (size_t i = 1; i <= group.numberOfGenerators(); ++i)
+	{
+		for (size_t c : combination)
+		{
 			matrices.push_back(group.generator(i)[c - 1]);
 		}
 		generateInvarianceMatrix(matrices);
@@ -345,11 +378,14 @@ void InvarianceEquationSolver::generateInvarianceMatrix(std::vector<MyMatrix3cd>
 {
 	if (matrices.size() != mOperation.size()) { return; }
 
-	for (size_t i = 0; i < mOperation.size(); ++i) {
-		if (mOperation[i] == 'A') {
+	for (size_t i = 0; i < mOperation.size(); ++i)
+	{
+		if (mOperation[i] == 'A')
+		{
 			matrices[i].adjointInPlace();
 		}
-		if (mOperation[i] == 'T') {
+		if (mOperation[i] == 'T')
+		{
 			matrices[i].transposeInPlace();
 		}
 	}
@@ -357,7 +393,8 @@ void InvarianceEquationSolver::generateInvarianceMatrix(std::vector<MyMatrix3cd>
 	std::vector<MyMatrixXcd> results(matrices.size() - 1);
 
 	results[0] = kroneckerProduct(matrices[0], matrices[1]);
-	for (size_t i = 1; i < results.size(); ++i) {
+	for (size_t i = 1; i < results.size(); ++i)
+	{
 		results[i] = kroneckerProduct(results[i - 1], matrices[i + 1]);
 	}
 

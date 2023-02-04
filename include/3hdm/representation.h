@@ -72,7 +72,8 @@ void Representation<_Scalar, _Dimension>::load(const std::string & fileName, con
 	auto filePath = std::filesystem::path(fileDir + '/' + fileName);
 	std::fstream ifile;
 	ifile.open(filePath, std::ios::in);
-	if (ifile.is_open() == false) {
+	if (ifile.is_open() == false)
+	{
 		std::cerr << filePath << " file not opening properly!" << '\n';
 		exit(EXIT_FAILURE);
 	}
@@ -83,9 +84,11 @@ void Representation<_Scalar, _Dimension>::load(const std::string & fileName, con
 	size_t dimController = 0;
 
 	mMatrices.clear();
-	while (std::getline(ifile, matrixRow)) {
+	while (std::getline(ifile, matrixRow))
+	{
 		ss << matrixRow + "\n";
-		if (++dimController == _Dimension) {
+		if (++dimController == _Dimension)
+		{
 			matrix.load(ss);
 			mMatrices.push_back(matrix);
 			ss.str(std::string());
@@ -123,7 +126,8 @@ void Representation<_Scalar, _Dimension>::setMatrices(const std::vector<MyMatrix
 template<typename _Scalar, int _Dimension>
 void Representation<_Scalar, _Dimension>::checkDimension()
 {
-	if (mDimension == 0 && mMatrices.empty() == false) {
+	if (mDimension == 0 && mMatrices.empty() == false)
+	{
 		int cols = mMatrices.front().cols();
 		int rows = mMatrices.front().rows();
 		assert(cols == rows && "Matrix representation must be square");

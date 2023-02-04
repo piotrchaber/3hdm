@@ -26,7 +26,8 @@ std::vector<MyMatrix3cd> Group::generator(size_t ith) const
 {
 	std::vector<MyMatrix3cd> result;
 
-	for (const auto & representation : mRepresentations) {
+	for (const auto & representation : mRepresentations)
+	{
 		result.push_back(representation.matrices().at(ith - 1));
 	}
 
@@ -43,7 +44,8 @@ void Group::load(const std::string & fileName, const std::string & fileDir)
 	auto filePath = std::filesystem::path(fileDir + '/' + fileName);
 	std::fstream ifile;
 	ifile.open(filePath, std::ios::in);
-	if (ifile.is_open() == false) {
+	if (ifile.is_open() == false)
+	{
 		std::cerr << filePath << " file not opening properly!" << '\n';
 		exit(EXIT_FAILURE);
 	}
@@ -56,9 +58,11 @@ void Group::load(const std::string & fileName, const std::string & fileDir)
 	size_t genController = 0;
 
 	mRepresentations.clear();
-	while (std::getline(ifile, matrixRow)) {
+	while (std::getline(ifile, matrixRow))
+	{
 		ss << matrixRow + '\n';
-		if (++dimController == 3) {
+		if (++dimController == 3)
+		{
 			++genController;
 			matrix.load(ss);
 			matrices.push_back(matrix);
@@ -66,7 +70,8 @@ void Group::load(const std::string & fileName, const std::string & fileDir)
 			ss.clear();
 			dimController = 0;
 		}
-		if (genController == mNumberOfGenerators) {
+		if (genController == mNumberOfGenerators)
+		{
 			mRepresentations.push_back(Representation3cd(matrices));
 			matrices.clear();
 			genController = 0;

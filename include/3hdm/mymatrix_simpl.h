@@ -10,9 +10,12 @@ struct setActualZeroImpl
 template <typename Object, bool isComplex>
 void setActualZeroImpl<Object, isComplex>::operator()(Object & object)
 {
-	for (int row = 0; row < object.rows(); ++row) {
-		for (int col = 0; col < object.cols(); ++col) {
-			if (fabs(object(row, col)) < 0.000001) {
+	for (int row = 0; row < object.rows(); ++row)
+	{
+		for (int col = 0; col < object.cols(); ++col)
+		{
+			if (fabs(object(row, col)) < 0.000001)
+			{
 				object(row, col) = 0.0;
 			}
 		}
@@ -28,12 +31,16 @@ struct setActualZeroImpl<Object, true>
 template<typename Object>
 void setActualZeroImpl<Object, true>::operator()(Object & object)
 {
-	for (int row = 0; row < object.rows(); ++row) {
-		for (int col = 0; col < object.cols(); ++col) {
-			if (fabs(object(row, col).imag()) < 0.000001) {
+	for (int row = 0; row < object.rows(); ++row)
+	{
+		for (int col = 0; col < object.cols(); ++col)
+		{
+			if (fabs(object(row, col).imag()) < 0.000001)
+			{
 				object(row, col).imag(0.0);
 			}
-			if (fabs(object(row, col).real()) < 0.000001) {
+			if (fabs(object(row, col).real()) < 0.000001)
+			{
 				object(row, col).real(0.0);
 			}
 		}
