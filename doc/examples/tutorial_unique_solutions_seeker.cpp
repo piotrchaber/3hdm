@@ -5,16 +5,14 @@
 std::filesystem::path findBuildPath()
 {
 	auto buildPath = std::filesystem::current_path();
-	auto buildName = buildPath.filename();
-	while (buildName != "build")
+	while (buildPath.filename() != "build")
 	{
 		buildPath = buildPath.parent_path();
-		buildName = buildPath.filename();
 	}
-	return buildPath / "";
+	return buildPath;
 }
 
-void print(UniqueSolution& unique, std::ostream& os = std::cout)
+void print(UniqueSolution & unique, std::ostream & os = std::cout)
 {
 	const Eigen::IOFormat fmtVector(6, Eigen::DontAlignCols, " ", " ", "", "", "[", "]");
 	const Eigen::IOFormat fmtPhase(6, Eigen::DontAlignCols, " ", " ", "", "", "{", "}");
@@ -22,9 +20,11 @@ void print(UniqueSolution& unique, std::ostream& os = std::cout)
 	unique.setActualZero();
 	os << unique.transpose().format(fmtVector) << '\n'
 		<< unique.groups() << '\n';
-	if (unique.phases().empty() == false) {
+	if (unique.phases().empty() == false)
+	{
 		auto phases = unique.phases();
-		for (auto& phase : phases) {
+		for (auto & phase : phases)
+		{
 			phase.setActualZero();
 			os << phase.transpose().format(fmtPhase) << " ";
 		}
@@ -33,9 +33,10 @@ void print(UniqueSolution& unique, std::ostream& os = std::cout)
 	os << '\n';
 }
 
-void print(UniqueSolutions& uniques, std::ostream& os = std::cout)
+void print(UniqueSolutions & uniques, std::ostream & os = std::cout)
 {
-	for (auto& unique : uniques) {
+	for (auto & unique : uniques)
+	{
 		print(unique, os);
 	}
 }
@@ -54,10 +55,11 @@ int main()
 	ussp.find(solutions);
 	UniqueSolutions usp;
 	usp = ussp.items();
-	std::cout << "Uniques particular solutions:" << '\n';
+	std::cout << "Unique particular solutions:" << '\n';
 	print(usp);
 
-	for (auto& solution : solutions) {
+	for (auto & solution : solutions)
+	{
 		solution.switchForm();
 	}
 
@@ -65,8 +67,6 @@ int main()
 	ussg.find(solutions);
 	UniqueSolutions usg;
 	usg = ussg.items();
-	std::cout << "Uniques general solutions:" << '\n';
+	std::cout << "Unique general solutions:" << '\n';
 	print(usg);
-
-	return EXIT_SUCCESS;
 }

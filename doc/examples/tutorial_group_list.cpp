@@ -3,17 +3,29 @@
 
 #include "3hdm/group_list.h"
 
-void print(const GroupList::Data& group, const std::string & message = "")
+std::filesystem::path findBuildPath()
 {
-    if (message.empty() == false) {
+	auto buildPath = std::filesystem::current_path();
+	while (buildPath.filename() != "build")
+	{
+		buildPath = buildPath.parent_path();
+	}
+	return buildPath;
+}
+
+void print(const GroupList::Data & group, const std::string & message = "")
+{
+    if (message.empty() == false)
+    {
         std::cout << message << '\n';
     }
     std::cout << group.structure << " " << group.gen << '\n';
 }
 
-void print(const std::vector<GroupList::Data>& groups, const std::string & message = "")
+void print(const std::vector<GroupList::Data> & groups, const std::string & message = "")
 {
-    if (message.empty() == false) {
+    if (message.empty() == false)
+    {
         std::cout << message << '\n';
     }
 
@@ -21,18 +33,6 @@ void print(const std::vector<GroupList::Data>& groups, const std::string & messa
     {
         print(group);
     }
-}
-
-std::filesystem::path findBuildPath()
-{
-	auto buildPath = std::filesystem::current_path();
-	auto buildName = buildPath.filename();
-	while (buildName != "build")
-	{
-		buildPath = buildPath.parent_path();
-		buildName = buildPath.filename();
-	}
-	return buildPath / "";
 }
 
 int main()
@@ -64,6 +64,4 @@ int main()
 
     auto selected_groups = GroupList::Structures({{21, 1}, {24, 3}});
     print(selected_groups, "Selected groups");
-    
-    return EXIT_SUCCESS;
 }

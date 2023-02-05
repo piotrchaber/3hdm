@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MYMATRIX_H
+#define MYMATRIX_H
 
 #include <iostream>
 #include <filesystem>
@@ -9,15 +10,15 @@
 #include "mymatrix_simpl.h"
 
 template<typename _Scalar, int _Rows, int _Cols>
-class MyMatrix : public Eigen::Matrix<_Scalar, _Rows, _Cols> {
+class MyMatrix : public Eigen::Matrix<_Scalar, _Rows, _Cols>
+{
 public:
 	using Eigen::Matrix<_Scalar, _Rows, _Cols>::Matrix;
-	//using Eigen::Matrix<_Scalar, _Rows, _Cols>::operator=;
 	virtual ~MyMatrix() = default;
 	
 	virtual void setActualZero();
-	void load(std::stringstream& ss);
-	void load(const std::string& fileName, const std::string& fileDir);
+	void load(std::stringstream & ss);
+	void load(const std::string & fileName, const std::string & fileDir);
 };
 
 typedef MyMatrix<std::complex<double>, 2, 2> MyMatrix2cd;
@@ -97,9 +98,10 @@ void MyMatrix<_Scalar, _Rows, _Cols>::setActualZero()
 }
 
 template <typename _Scalar, int _Rows, int _Cols>
-void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream& ss)
+void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream & ss)
 {
-	if (ss.str() == "") {
+	if (ss.str() == "")
+	{
 		std::cerr << "Stringstream is empty!" << '\n';
 		*this = MyMatrix<_Scalar, Eigen::Dynamic, Eigen::Dynamic>(0, 0);
 		return;
@@ -109,38 +111,45 @@ void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream& ss)
 	std::vector<_Scalar> scalars;
 	while (ss >> scalar) scalars.push_back(scalar);
 
-	if (scalars.size() % _Rows != 0) {
+	if (scalars.size() % _Rows != 0)
+	{
 		std::cerr << "Wrong number of elements!" << '\n';
 		*this = MyMatrix<_Scalar, Eigen::Dynamic, Eigen::Dynamic>(0, 0);
 		return;
 	}
 
 	*this = MyMatrix<_Scalar, Eigen::Dynamic, Eigen::Dynamic>(_Rows, _Cols);
-	for (size_t row = 0; row < _Rows; ++row) {
-		for (size_t col = 0; col < _Cols; ++col) {
+	for (size_t row = 0; row < _Rows; ++row)
+	{
+		for (size_t col = 0; col < _Cols; ++col)
+		{
 			this->operator()(row, col) = scalars[(row * _Rows) + col];
 		}
 	}
 }
 
 template <typename _Scalar, int _Rows, int _Cols>
-void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string& fileName, const std::string& fileDir)
+void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string & fileName, const std::string & fileDir)
 {
-	auto filePath = std::filesystem::path(fileDir + fileName);
+	auto filePath = std::filesystem::path(fileDir + '/' + fileName);
 	std::fstream ifile;
 	ifile.open(filePath, std::ios::in);
-	if(ifile.is_open() == false) {
+	if(ifile.is_open() == false)
+	{
 		std::cerr << filePath << " file not opening properly!" << '\n';
 		exit(EXIT_FAILURE);
 	}
 	
 	std::stringstream ss;
 	std::string matrixRow;
-	while(std::getline(ifile, matrixRow)) {
+	while(std::getline(ifile, matrixRow))
+	{
 		ss << matrixRow + "\n";
 	}
 	
 	load(ss);
 }
+
+#endif // MYMATRIX_H
 
 // TODO: loadFromFile method of MyMatrixX class needs to provide any information about matrix dimension
