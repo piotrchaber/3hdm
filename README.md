@@ -173,9 +173,9 @@ and so on. Based on the above plan I have decided to collect these functions/met
 - MyMatrix (*represents a normal matrix enriched with a few additional possibilities, in particular may represent a matrix of one group generator*)
 - Representation (*represents one 3-dimensional matrix representation of given group, is a collection of matrices of each group generator*)
 - Group (*represents one group, is a collection of all 3-dimensional matrix representations of given group*)
-- InvarianceEquation (*represents invariance equation solver, computes particular or general solutions of the invariance equation for a given group*)
-- Unique (*represents unique solutions seeker, finds unique vector-solutions in both particular and general form*)
-- MassMatrix (*represents mass matrix calculator, determines mass matrix for a given vector-solution and computes mass ratio of particles*)
+- InvarianceEquationSolver (*represents invariance equation solver, computes particular or general solutions of the invariance equation for a given group*)
+- UniqueSolutionsSeeker (*represents unique solutions seeker, finds unique vector-solutions in both particular and general form*)
+- MassCalculator (*represents mass matrix calculator, determines mass matrix for a given vector-solution and computes mass ratio of particles*)
 
 ## Math definitions
  > **Group** is a set of objects equipped with binary operation acting on these objects and satisfying some mathematical properties called group axiom: the operation is associative, identity element exists, every element has an inverse; example: set of integers {..., -2, -1, 0, 1, 2, ...} with addition as a group operation and 0 as an identity element\
