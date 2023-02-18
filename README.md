@@ -24,8 +24,10 @@ All we have are 3-dimensional matrix representations of generators of given grou
 
 That's all we have to do for one group and one combination of matrix representations of this group, so at the end we need to loop above-mentioned steps for all possible combinations and all considered groups.
 ## What are particular and general solutions?
+In general, if a solution for a given group and given combination of its representations exists, it can take three forms, namely original, particular or general. Below I will try to briefly define them and give math reasons for their existence, on the example of group [ 36, 3 ] and charged leptons.
+
 **Step 1**: Obtaining original solutions\
-First of all, we need to obtain results for considered group, and here are the result we got for group [ 36, 3 ]
+First of all, we need to obtain results for considered group, and here are the result we got
 
 <details>
  <summary> Original solutions </summary>
@@ -96,7 +98,7 @@ Scalar multiple of an eigenvector is also an eigenvector for a particular eigenv
 
 **Step 3**: Making the symmetry useful\
 In the equation for mass matrix, namely\
-(equation for mass matrix)\
+<img src="https://latex.codecogs.com/png.image?\dpi{120}&space;M^{l}=-\frac{1}{\sqrt{2}}\Bigg(|v_{1}|h_{1}^{l&space;}+&space;&space;e^{-i\chi_{2}}|v_{2}|h_{2}^{l&space;}+&space;e^{-i\chi_{3}}|v_{3}|h_{3}^{l}\Bigg)" />\
 it doesn't matter where the Yukawa matrices will stand, I mean it doesn't matter the order in which the matrices occur (in the end we get the same result no matter if matrix h_1 will be the first, second or third factor of the sum). Yukawa matrices are created from solutions we have obtained, from 27 solution coefficients we get 3 Yukawa matrices - each subsequent 9 coefficients can create one of Yukawa matrices, therefore in the vector solution we can freely swap every next 9-dimensional subvectors with each other. That means solutions that differ only in the order of occurrence of 9-dimensional sub-vectors are exactly the same! So what we need to do? We need to decide how we would like to order the Yukawa matrices/9-dimensional subvectors (one order for all solutions). I decided to sort subvectors by index of its first non-zero element. At the end we can multiply a vector solution by a scalar so that its first non-zero element is equal to 1. After all we have
 
 <details>
@@ -135,10 +137,59 @@ From such obtained solutions we can get the general ones. In this case, only the
 [(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (-0.5,0.866025) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (-0.5,0.866025) (0,0)]\
 has the following general form\
 [(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]\
-and phase {(-0.5,0.866025) (-0.5,0.866025)}.
+and phase {(-0.5,0.866025) (-0.5,0.866025)}. While for all solutions we have
+
+<details>
+ <summary> General solutions </summary>
+1x1x1<br/>
+[(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]<br/>
+{(1,0) (1,0)}<br/>
+[(0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0)]<br/>
+{(1,0) (1,0)}<br/>
+1x2x2<br/>
+[(0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0)]<br/>
+{(1,0) (-0.5,0.866025)}<br/>
+[(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]<br/>
+{(-0.5,0.866025) (-0.5,0.866025)}<br/>
+1x3x3<br/>
+[(0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0)]<br/>
+{(1,0) (-0.5,-0.866025)}<br/>
+[(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]<br/>
+{(-0.5,-0.866025) (-0.5,-0.866025)}<br/>
+2x1x2<br/>
+[(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]<br/>
+{(-0.5,0.866025) (1,0)}<br/>
+[(0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0)]<br/>
+{(-0.5,-0.866025) (1,0)}<br/>
+2x2x3<br/>
+[(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]<br/>
+{(-0.5,-0.866025) (-0.5,0.866025)}<br/>
+[(0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0)]<br/>
+{(-0.5,-0.866025) (-0.5,0.866025)}<br/>
+2x3x1<br/>
+[(0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0)]<br/>
+{(-0.5,-0.866025) (-0.5,-0.866025)}<br/>
+[(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]<br/>
+{(1,0) (-0.5,-0.866025)}<br/>
+3x1x3<br/>
+[(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]<br/>
+{(-0.5,-0.866025) (1,0)}<br/>
+[(0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0)]<br/>
+{(-0.5,0.866025) (1,0)}<br/>
+3x2x1<br/>
+[(0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0)]<br/>
+{(-0.5,0.866025) (-0.5,0.866025)}<br/>
+[(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]<br/>
+{(1,0) (-0.5,0.866025)}<br/>
+3x3x2<br/>
+[(0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0)]<br/>
+{(-0.5,0.866025) (-0.5,-0.866025)}<br/>
+[(0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (0,0) (1,0) (0,0) (0,0)]<br/>
+{(-0.5,0.866025) (-0.5,-0.866025)}
+</details>
 
 **Step 5**: Making the theorem useful\
-Any linear combination of eigenvectors in the same eigenspace is another eigenvector in the same eigenspace. So, I have decided to divide any 2- or more-dimensional solutions into 1-dimensional ones (assuming the scalar coefficient for all eigenvectors except one to be equal to zero), and consider them separately. Thus, for the group [ 36, 3 ] we get 18 one-dimensional solutions.
+Any linear combination of eigenvectors in the same eigenspace is another eigenvector in the same eigenspace. So, I have decided to divide any 2- or more-dimensional solutions into 1-dimensional ones (assuming the scalar coefficient for all eigenvectors except one to be equal to zero), and consider them separately. Thus, for the group under consideration, we get 18 one-dimensional solutions.
 
 **Step 6**: Obtaining unique general solutions\
 When looking for unique general solutions we take into account both their form and phase. Thus, in the end, for the group [ 36, 3 ], we obtain the following
@@ -175,7 +226,7 @@ and so on. Based on the above plan I have decided to collect these functions/met
 - Group (*represents one group, is a collection of all 3-dimensional matrix representations of given group*)
 - InvarianceEquationSolver (*represents invariance equation solver, computes particular or general solutions of the invariance equation for a given group*)
 - UniqueSolutionsSeeker (*represents unique solutions seeker, finds unique vector-solutions in both particular and general form*)
-- MassCalculator (*represents mass matrix calculator, determines mass matrix for a given vector-solution and computes mass ratio of particles*)
+- MassCalculator (*represents mass calculator, determines mass matrix for a given vector-solution and computes mass ratio of particles*)
 
 ## Math definitions
  > **Group** is a set of objects equipped with binary operation acting on these objects and satisfying some mathematical properties called group axiom: the operation is associative, identity element exists, every element has an inverse; example: set of integers {..., -2, -1, 0, 1, 2, ...} with addition as a group operation and 0 as an identity element\
