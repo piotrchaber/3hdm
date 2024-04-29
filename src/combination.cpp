@@ -68,14 +68,14 @@ bool Combination::isValid(const std::vector<size_t> & combination) const
 bool Combination::next()
 {
     int index = mUniqueCoefficients.size() - 1;
-
-	mReducedCombination[index]++;
-	while (mReducedCombination[index] == mNumbersUpTo + 1)
-	{
-		mReducedCombination[index] = 1;
+    
+    mReducedCombination[index]++;
+    while (mReducedCombination[index] == mNumbersUpTo + 1)
+    {
+        mReducedCombination[index] = 1;
         if (index == 0) break;
-		mReducedCombination[--index]++;
-	}
+        mReducedCombination[--index]++;
+    }
 
     extend();
 	
@@ -87,13 +87,13 @@ bool Combination::previous()
 {
     int index = mUniqueCoefficients.size() - 1;
 
-	mReducedCombination[index]--;
-	while (mReducedCombination[index] == 0)
-	{
-		mReducedCombination[index] = mNumbersUpTo;
+    mReducedCombination[index]--;
+    while (mReducedCombination[index] == 0)
+    {
+        mReducedCombination[index] = mNumbersUpTo;
         if (index == 0) break;
-		mReducedCombination[--index]--;
-	}
+        mReducedCombination[--index]--;
+    }
 
     extend();
 	
