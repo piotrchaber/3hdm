@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(3HDM_SOURCE
+    src/combination.cpp
     src/group_list.cpp
     src/group.cpp
     src/invariance_equation_solver.cpp
@@ -77,3 +78,4 @@ add_example(tutorial_invariance_equation_solver.cpp invariance_equation_solver)
 add_example(tutorial_mymatrix.cpp mymatrix)
 add_example(tutorial_representation.cpp representation)
 add_example(tutorial_unique_solutions_seeker.cpp unique_solutions_seeker)
+add_example(tutorial_combination.cpp combination)
