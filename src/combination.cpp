@@ -28,7 +28,7 @@ void Combination::extend()
     int extendedIndex = 0;
     for (auto const & coefficient : mBase)
     {
-        mExtendedCombination.at(extendedIndex++) = (mUniqueCoefficients[coefficient]);
+        mExtendedCombination.at(extendedIndex++) = mUniqueCoefficients[coefficient];
     }
 }
 
@@ -51,7 +51,7 @@ void Combination::invalidate()
 bool Combination::isValid(const std::vector<size_t> & combination) const
 {
     auto predicate = [&](auto coefficient) { return coefficient > mNumbersUpTo; };
-    if (mBase.size() != combination.size() || std::any_of(combination.begin(), combination.end(), predicate))
+    if ((mBase.size() != combination.size()) || std::any_of(combination.begin(), combination.end(), predicate))
     {
         return false;
     }
