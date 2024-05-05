@@ -10,11 +10,11 @@ Combination::Combination(const std::string & base, size_t numbersUpTo)
     set(LowerLimitExtendedCombination());
 }
 
-Combination::Combination(const std::string & base, size_t numbersUpTo, const std::vector<size_t> & combination)
+Combination::Combination(const std::string & base, size_t numbersUpTo, const std::vector<size_t> & initialCombination)
     : mBase(base), mNumbersUpTo(numbersUpTo)
 {
     findUniqueCoefficients();
-    set(combination);
+    set(initialCombination);
 }
 
 void Combination::extend()

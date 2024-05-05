@@ -5,8 +5,9 @@
 #include <string>
 #include <vector>
 
-#include "mymatrix.h"
+#include "combination.h"
 #include "group.h"
+#include "mymatrix.h"
 
 class InvarianceEquationSolver
 {
@@ -51,7 +52,7 @@ public:
 	enum class Particles { ChargedLeptons, DiracNeutrino, MajoranaNeutrino };
 	typedef Solution::Form Form;
 
-	explicit InvarianceEquationSolver(const Particles & particles, const Form & form);
+	InvarianceEquationSolver(const Particles & particles, const Form & form);
 	InvarianceEquationSolver(const Group & group, const Particles & particles, const Form & form);
 	InvarianceEquationSolver(const Group & group, const std::vector<size_t> & combination, const Particles & particles, const Form & form);
 	virtual ~InvarianceEquationSolver() = default;
