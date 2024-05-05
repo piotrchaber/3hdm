@@ -9,7 +9,7 @@ class Combination
 {
     public:
         Combination(const std::string & base, size_t numbersUpTo);
-        Combination(const std::string & base, size_t numbersUpTo, const std::vector<size_t> & combination);
+        Combination(const std::string & base, size_t numbersUpTo, const std::vector<size_t> & initialCombination);
 
         const std::vector<size_t> & get() const;
         bool next();

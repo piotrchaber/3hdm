@@ -3,31 +3,6 @@
 #include "Eigen/Eigenvalues"
 #include "unsupported/Eigen/KroneckerProduct"
 
-static std::map<char, size_t> findUniqueChars(const std::string & s)
-{
-	std::map<char, size_t> result;
-	for (auto const & c : s) { result[toupper(c)]; }
-	return result;
-}
-
-static std::vector<size_t> extendCombination(const std::string & shape, const std::vector<size_t> & combination, std::map<char, size_t> & uniqueChars)
-{
-	std::vector<size_t> result(shape.size());
-
-	int i = 0;
-	for (auto & uniqueChar : uniqueChars)
-	{
-		uniqueChar.second = combination[i++];
-	}
-
-	for (size_t i = 0; i < shape.size(); ++i)
-	{
-		result[i] = uniqueChars[shape[i]];
-	}
-
-	return result;
-}
-
 static void extractColumnAndPhase(MyMatrixXcd::ColXpr & column, MyVectorXcd & phase)
 {
 	auto nonZeroElements = (column.array().abs() > 0.00001).count();
@@ -187,34 +162,18 @@ InvarianceEquationSolver::InvarianceEquationSolver(const Group & group, const st
 
 void InvarianceEquationSolver::compute(const Group & group)
 {
-	std::map<char, size_t> uniqueCoeffs = findUniqueChars(mShape);
-	std::vector<size_t> partialCombination(uniqueCoeffs.size(), 1);
-	std::vector<size_t> extendedCombination;
-	int index = uniqueCoeffs.size() - 1;
-
+	Combination combination(mShape, group.numberOfRepresentations());
+	
 	mIntersectionBases.clear();
-	while (true)
+	do
 	{
-		extendedCombination = extendCombination(mShape, partialCombination, uniqueCoeffs);
-		compute(group, extendedCombination);
+		compute(group, combination.get());
 		if (mEquationState == EquationState::NoProblem)
 		{
 			mIntersectionBases.push_back(mIntersectionBasis);
 		}
-
-		partialCombination[index]++;
-		while (partialCombination[index] == group.numberOfRepresentations() + 1)
-		{
-			if (index == 0)
-			{
-				reset();
-				return;
-			}
-			partialCombination[index] = 1;
-			partialCombination[--index]++;
-		}
-		index = uniqueCoeffs.size() - 1;
-	}
+	} while (combination.next());
+	reset();
 }
 
 void InvarianceEquationSolver::compute(const Group & group, const std::vector<size_t> & combination)
