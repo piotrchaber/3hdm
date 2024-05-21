@@ -10,6 +10,7 @@ set(3HDM_SOURCE
     src/group_list.cpp
     src/group.cpp
     src/invariance_equation_solver.cpp
+    src/matrix_form.cpp
     src/unique_solutions_seeker.cpp
 )
 set(EXAMPLES_DIR
@@ -79,3 +80,4 @@ add_example(tutorial_mymatrix.cpp mymatrix)
 add_example(tutorial_representation.cpp representation)
 add_example(tutorial_unique_solutions_seeker.cpp unique_solutions_seeker)
 add_example(tutorial_combination.cpp combination)
+add_example(tutorial_matrix_form.cpp matrix_form)
