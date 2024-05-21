@@ -7,6 +7,7 @@
 
 #include "combination.h"
 #include "group.h"
+#include "matrix_form.h"
 #include "mymatrix.h"
 
 class InvarianceEquationSolver
@@ -21,31 +22,25 @@ public:
 		};
 
 	public:
-		enum class Form { Particular, General };
+		enum class Form { Original, Particular, General };
 
 		virtual ~Solution() = default;
 
 		const bool & isGood() const;
+		const Form & form() const;
 		const Origin & origin() const;
 		const MyVectorXcd & phase(size_t ith) const;
 		int phases() const;
-		void setActualZero();
-		void switchForm();
-
-	protected:
-		void extractColumnAndPhase();
-		void setFirstElementTo(const std::complex<double> & value);
-		void sortByIndex();
-		void takeParticularForm();
-		void takeGeneralForm();
+		void switchFormTo(Form form);
 
 	private:
 		using MyMatrixXcd::operator=;
+		using MyMatrixXcd::MyMatrixXcd;
 		Form mForm;
 		Origin mOrigin;
 		bool mIsGood = false;
 		std::vector<MyVectorXcd> mPhases;
-		MyMatrixXcd mOriginalForm;
+		MyMatrixXcd mInitialForm;
 		friend class InvarianceEquationSolver;
 	};
 

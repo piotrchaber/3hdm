@@ -60,7 +60,7 @@ int main()
 
 	for (auto & solution : solutions)
 	{
-		solution.switchForm();
+		solution.switchFormTo(Solution::Form::General);
 	}
 
 	UniqueSolutionsSeeker ussg;
