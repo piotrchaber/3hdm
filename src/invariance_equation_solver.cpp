@@ -3,66 +3,14 @@
 #include "Eigen/Eigenvalues"
 #include "unsupported/Eigen/KroneckerProduct"
 
-static void extractColumnAndPhase(MyMatrixXcd::ColXpr & column, MyVectorXcd & phase)
-{
-	auto nonZeroElements = (column.array().abs() > 0.00001).count();
-	phase.resize(nonZeroElements == 0 ? nonZeroElements : nonZeroElements - 1);
-
-	int i = column.size() - 1;
-	while (nonZeroElements > 1)
-	{
-		if (abs(column[i]) > 0.00001)
-		{
-			phase[nonZeroElements - 2] = column[i];
-			column[i] = { 1.0,0.0 };
-			--nonZeroElements;
-		}
-		--i;
-	}
-}
-
-static bool indexCompare(const MyVectorXcd & vector1, const MyVectorXcd & vector2)
-{
-	auto isNonZero = [](const auto & element) { return abs(element) > 0.000001; };
-	auto firstNonZeroElement = [&](const auto & block) { return std::find_if(block.cbegin(), block.cend(), isNonZero); };
-	auto indexOfFirstNonZeroElement = [&](const auto & block) { return std::distance(block.cbegin(), firstNonZeroElement(block)); };
-
-	return indexOfFirstNonZeroElement(vector1) < indexOfFirstNonZeroElement(vector2);
-}
-
-static void setFirstElementTo(MyMatrixXcd::ColXpr & column, const std::complex<double> & value)
-{
-	auto isNonZero = [](const auto & element) { return abs(element) > 0.000001; };
-	auto isZero = [&](const auto & block) { return std::none_of(block.cbegin(), block.cend(), isNonZero); };
-	auto firstNonZeroElement = [&](const auto & block) { return *std::find_if(block.cbegin(), block.cend(), isNonZero); };
-	auto isFirstNonZeroElementEqual = [&](const auto & block) { return abs(firstNonZeroElement(block) - value) < 0.000001; };
-
-	for (auto && col : column.colwise())
-	{
-		if (isZero(col) || isFirstNonZeroElementEqual(col)) { break; }
-		col = (value / firstNonZeroElement(col)) * col;
-	}
-}
-
-static void sortByIndex(MyMatrixXcd::ColXpr & column)
-{
-	std::vector<MyVectorXcd> subvectors;
-	for (int i = 0; i < column.size(); i += 9)
-	{
-		subvectors.push_back(column.segment(i, 9));
-	}
-	
-	std::sort(subvectors.begin(), subvectors.end(), indexCompare);
-
-	for (int i = 0; i < column.size(); i += 9)
-	{
-		column.segment(i, 9) = subvectors[i/9];
-	}
-}
-
 const bool & InvarianceEquationSolver::Solution::isGood() const
 {
 	return mIsGood;
+}
+
+const InvarianceEquationSolver::Solution::Form & InvarianceEquationSolver::Solution::form() const
+{
+	return mForm;
 }
 
 const InvarianceEquationSolver::Solution::Origin & InvarianceEquationSolver::Solution::origin() const
@@ -80,64 +28,38 @@ int InvarianceEquationSolver::Solution::phases() const
 	return mPhases.size();
 }
 
-void InvarianceEquationSolver::Solution::setActualZero()
+static InvarianceEquationSolver::Solution::Form formConverter(MatrixForm::Form form)
 {
-	MyMatrixXcd::setActualZero();
-	for (auto & phase : mPhases)
-	{
-		phase.setActualZero();
-	}
+    switch (form)
+    {
+    case MatrixForm::Form::General:
+	    return InvarianceEquationSolver::Solution::Form::General;
+	case MatrixForm::Form::Particular:
+	    return InvarianceEquationSolver::Solution::Form::Particular;
+	default:
+	    return InvarianceEquationSolver::Solution::Form::Original;
+    }
 }
 
-void InvarianceEquationSolver::Solution::switchForm()
+static MatrixForm::Form formConverter(InvarianceEquationSolver::Solution::Form form)
 {
-	*this = mOriginalForm;
-	if (mForm == Form::Particular)
-	{
-		takeGeneralForm();
-	}
-	if (mForm == Form::General)
-	{
-		takeParticularForm();
-	}
+    switch (form)
+    {
+	case InvarianceEquationSolver::Solution::Form::General:
+	    return MatrixForm::Form::General;
+	case InvarianceEquationSolver::Solution::Form::Particular:
+	    return MatrixForm::Form::Particular;
+	default:
+	    return MatrixForm::Form::Original;
+    }
 }
 
-void InvarianceEquationSolver::Solution::extractColumnAndPhase()
+void InvarianceEquationSolver::Solution::switchFormTo(Form form)
 {
-	mPhases.resize(cols());
-	int i = 0;
-	for (auto && col : colwise())
-	{
-		::extractColumnAndPhase(col, mPhases[i++]);
-	}
-}
-
-void InvarianceEquationSolver::Solution::setFirstElementTo(const std::complex<double> & value)
-{
-	for (auto && col : colwise())
-	{
-		::setFirstElementTo(col, value);
-	}
-}
-
-void InvarianceEquationSolver::Solution::sortByIndex()
-{
-	for (auto && col : colwise())
-	{
-		::sortByIndex(col);
-	}
-}
-
-void InvarianceEquationSolver::Solution::takeParticularForm()
-{
-	setFirstElementTo(1.0);
-}
-
-void InvarianceEquationSolver::Solution::takeGeneralForm()
-{
-	sortByIndex();
-	setFirstElementTo(1.0);
-	extractColumnAndPhase();
+	MatrixForm matrixForm(mInitialForm, formConverter(form));
+	mForm = formConverter(matrixForm.form());
+	mPhases = matrixForm.phases();
+	*this = matrixForm.matrix();
 }
 
 InvarianceEquationSolver::InvarianceEquationSolver(const Particles & particles, const Form & form)
@@ -185,17 +107,10 @@ void InvarianceEquationSolver::compute(const Group & group, const std::vector<si
 
 	if (mEquationState == EquationState::NoProblem)
 	{
-		mIntersectionBasis.mOriginalForm = mIntersectionBasis;
+		mIntersectionBasis.mInitialForm = mIntersectionBasis;
 		mIntersectionBasis.mOrigin = { group.structure(), combination };
 		mIntersectionBasis.mIsGood = checkSolution();
-		if (mIntersectionBasis.mForm == Form::Particular)
-		{
-			mIntersectionBasis.takeParticularForm();
-		}
-		if (mIntersectionBasis.mForm == Form::General)
-		{
-			mIntersectionBasis.takeGeneralForm();
-		}
+		mIntersectionBasis.switchFormTo(mIntersectionBasis.mForm);
 	}
 }
 

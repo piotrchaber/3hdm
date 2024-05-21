@@ -1,6 +1,8 @@
 #ifndef MATRIXFORM_H
 #define MATRIXFORM_H
 
+#include <vector>
+
 #include "mymatrix.h"
 
 class MatrixForm
