@@ -48,7 +48,7 @@ int main()
 	Group group("tutorial_group", 2);
 	group.load(buildPath);
 
-	InvarianceEquationSolver ies(group, Particles::ChargedLeptons, Solution::Form::Particular);
+	InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular, group);
 	Solutions solutions = ies.solutions();
 
 	UniqueSolutionsSeeker ussp;
