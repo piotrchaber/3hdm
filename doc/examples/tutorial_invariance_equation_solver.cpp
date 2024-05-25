@@ -64,11 +64,11 @@ int main()
 	//Solution solution = ies.solution();
 	//print(solution);
 
-	//InvarianceEquationSolver ies(group, Particles::ChargedLeptons, Solution::Form::Particular);
+	//InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular, group);
 	//Solutions solutions = ies.solutions();
 	//print(solutions);
 
-	//InvarianceEquationSolver ies(group, {1, 1, 1}, Particles::ChargedLeptons, Solution::Form::Particular);
+	//InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular, group, {1, 1, 1});
 	//Solution solution = ies.solution();
 	//print(solution);
 }

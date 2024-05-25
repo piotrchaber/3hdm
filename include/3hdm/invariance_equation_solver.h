@@ -34,9 +34,9 @@ public:
 		void switchFormTo(Form form);
 
 	private:
-        void takeForm();
+		void takeForm();
 
-        using MyMatrixXcd::operator=;
+		using MyMatrixXcd::operator=;
 		Form mForm;
 		Origin mOrigin;
 		bool mIsGood = false;
@@ -49,14 +49,15 @@ public:
 	typedef Solution::Form Form;
 
 	InvarianceEquationSolver(const Particles & particles, const Form & form);
-	InvarianceEquationSolver(const Group & group, const Particles & particles, const Form & form);
-	InvarianceEquationSolver(const Group & group, const std::vector<size_t> & combination, const Particles & particles, const Form & form);
+	InvarianceEquationSolver(const Particles & particles, const Form & form, const Group & group);
+	InvarianceEquationSolver(const Particles & particles, const Form & form, const Group & group, const std::vector<size_t> & combination);
 	virtual ~InvarianceEquationSolver() = default;
 
 	void compute(const Group & group);
 	void compute(const Group & group, const std::vector<size_t> & combination);
 	const std::vector<MyMatrixXcd> & eigenvectors1() const;
 	const std::vector<MyMatrixXcd> & invarianceMatrices() const;
+	const MyMatrixXcd & intersectionBasis() const;
 	const Solution & solution() const;
 	const std::vector<Solution> & solutions() const;
 
@@ -69,6 +70,7 @@ protected:
 	void generateInvarianceMatrices(const Group & group, const std::vector<size_t> & combination);
 	void generateInvarianceMatrix(std::vector<MyMatrix3cd> & matrices);
 	void reset();
+	void setForm(const Form & form);
 	void setParticles(const Particles & particles);
 
 private:
@@ -77,8 +79,9 @@ private:
 	EquationState mEquationState = EquationState::NoProblem;
 	std::vector<MyMatrixXcd> mInvarianceMatrices;
 	std::vector<MyMatrixXcd> mEigenvectors1;
-	Solution mIntersectionBasis;
-	std::vector<Solution> mIntersectionBases;
+	MyMatrixXcd mIntersectionBasis;
+	Solution mSolution;
+	std::vector<Solution> mSolutions;
 	std::string mShape;
 	std::string mOperation;
 };

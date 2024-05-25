@@ -59,21 +59,21 @@ void InvarianceEquationSolver::Solution::takeForm()
 
 InvarianceEquationSolver::InvarianceEquationSolver(const Particles & particles, const Form & form)
 {
-	mIntersectionBasis.mForm = form;
 	setParticles(particles);
+	setForm(form);
 }
 
-InvarianceEquationSolver::InvarianceEquationSolver(const Group & group, const Particles & particles, const Form & form)
+InvarianceEquationSolver::InvarianceEquationSolver(const Particles & particles, const Form & form, const Group & group)
 {
-	mIntersectionBasis.mForm = form;
 	setParticles(particles);
+	setForm(form);
 	compute(group);
 }
 
-InvarianceEquationSolver::InvarianceEquationSolver(const Group & group, const std::vector<size_t> & combination, const Particles & particles, const Form & form)
+InvarianceEquationSolver::InvarianceEquationSolver(const Particles & particles, const Form & form, const Group & group, const std::vector<size_t> & combination)
 {
-	mIntersectionBasis.mForm = form;
 	setParticles(particles);
+	setForm(form);
 	compute(group, combination);
 }
 
@@ -81,13 +81,13 @@ void InvarianceEquationSolver::compute(const Group & group)
 {
 	Combination combination(mShape, group.numberOfRepresentations());
 	
-	mIntersectionBases.clear();
+	mSolutions.clear();
 	do
 	{
 		compute(group, combination.get());
 		if (mEquationState == EquationState::NoProblem)
 		{
-			mIntersectionBases.push_back(mIntersectionBasis);
+			mSolutions.push_back(mSolution);
 		}
 	} while (combination.next());
 	reset();
@@ -102,10 +102,10 @@ void InvarianceEquationSolver::compute(const Group & group, const std::vector<si
 
 	if (mEquationState == EquationState::NoProblem)
 	{
-		mIntersectionBasis.mInitialForm = mIntersectionBasis;
-		mIntersectionBasis.mOrigin = { group.structure(), combination };
-		mIntersectionBasis.mIsGood = checkSolution();
-		mIntersectionBasis.takeForm();
+		mSolution.mInitialForm = mIntersectionBasis;
+		mSolution.mOrigin = { group.structure(), combination };
+		mSolution.mIsGood = checkSolution();
+		mSolution.takeForm();
 	}
 }
 
@@ -119,19 +119,24 @@ const std::vector<MyMatrixXcd> & InvarianceEquationSolver::invarianceMatrices() 
 	return mInvarianceMatrices;
 }
 
-const InvarianceEquationSolver::Solution & InvarianceEquationSolver::solution() const
+const MyMatrixXcd & InvarianceEquationSolver::intersectionBasis() const
 {
 	return mIntersectionBasis;
 }
 
+const InvarianceEquationSolver::Solution & InvarianceEquationSolver::solution() const
+{
+	return mSolution;
+}
+
 const std::vector<InvarianceEquationSolver::Solution> & InvarianceEquationSolver::solutions() const
 {
-	return mIntersectionBases;
+	return mSolutions;
 }
 
 bool InvarianceEquationSolver::checkSolution() const
 {
-	for (const auto & solution : mIntersectionBasis.colwise())
+	for (const auto & solution : mSolution.mInitialForm.colwise())
 	{
 		for (const auto & invarianceMatrix : mInvarianceMatrices)
 		{
@@ -276,6 +281,11 @@ void InvarianceEquationSolver::reset()
 	mInvarianceMatrices.clear();
 	mEigenvectors1.clear();
 	mIntersectionBasis.resize(0, 0);
+}
+
+void InvarianceEquationSolver::setForm(const Form & form)
+{
+	mSolution.mForm = form;
 }
 
 void InvarianceEquationSolver::setParticles(const Particles & particles)
