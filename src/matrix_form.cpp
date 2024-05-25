@@ -1,18 +1,10 @@
 #include "3hdm/matrix_form.h"
 
 MatrixForm::MatrixForm(const MyMatrixXcd & matrix, const Form & form)
-    : mInitialMatrix(matrix)
-    , mMatrix(matrix)
-    , mForm(form)
-    , mInitialPhases(std::vector<MyVectorXcd>(matrix.cols(), MyVectorXcd::Zero(1)))
+    : mMatrix(matrix)
     , mPhases(std::vector<MyVectorXcd>(matrix.cols(), MyVectorXcd::Zero(1)))
 {
-    setMatrixForm();
-}
-
-const MatrixForm::Form & MatrixForm::form() const
-{
-    return mForm;
+    setMatrixForm(form);
 }
 
 const MyMatrixXcd & MatrixForm::matrix() const
@@ -28,15 +20,6 @@ const MyVectorXcd & MatrixForm::phase(size_t ith) const
 const std::vector<MyVectorXcd> & MatrixForm::phases() const
 {
     return mPhases;
-}
-
-void MatrixForm::switchFormTo(const Form & form)
-{
-    if (mForm == form) { return; }
-    mMatrix = mInitialMatrix;
-    mForm = form;
-    mPhases = mInitialPhases;
-    setMatrixForm();
 }
 
 void MatrixForm::setGeneralForm()
@@ -58,19 +41,19 @@ void MatrixForm::setParticularForm()
     setActualZero();
 }
 
-void MatrixForm::setMatrixForm()
+void MatrixForm::setMatrixForm(const Form & form)
 {
-    if (mForm == Form::Original)
+    if (Form::Original == form)
     {
         setOriginalForm();
     }
 
-    if (mForm == Form::Particular)
+    if (Form::Particular == form)
     {
         setParticularForm();
     }
 
-    if (mForm == Form::General)
+    if (Form::General == form)
     {
         setGeneralForm();
     }

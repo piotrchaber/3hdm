@@ -34,8 +34,9 @@ public:
 		void switchFormTo(Form form);
 
 	private:
-		using MyMatrixXcd::operator=;
-		using MyMatrixXcd::MyMatrixXcd;
+        void takeForm();
+
+        using MyMatrixXcd::operator=;
 		Form mForm;
 		Origin mOrigin;
 		bool mIsGood = false;
