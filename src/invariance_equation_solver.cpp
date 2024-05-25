@@ -28,19 +28,6 @@ int InvarianceEquationSolver::Solution::phases() const
 	return mPhases.size();
 }
 
-static InvarianceEquationSolver::Solution::Form formConverter(MatrixForm::Form form)
-{
-    switch (form)
-    {
-    case MatrixForm::Form::General:
-	    return InvarianceEquationSolver::Solution::Form::General;
-	case MatrixForm::Form::Particular:
-	    return InvarianceEquationSolver::Solution::Form::Particular;
-	default:
-	    return InvarianceEquationSolver::Solution::Form::Original;
-    }
-}
-
 static MatrixForm::Form formConverter(InvarianceEquationSolver::Solution::Form form)
 {
     switch (form)
@@ -56,8 +43,16 @@ static MatrixForm::Form formConverter(InvarianceEquationSolver::Solution::Form f
 
 void InvarianceEquationSolver::Solution::switchFormTo(Form form)
 {
-	MatrixForm matrixForm(mInitialForm, formConverter(form));
-	mForm = formConverter(matrixForm.form());
+	if (mForm != form)
+	{
+		mForm = form;
+		takeForm();
+	}
+}
+
+void InvarianceEquationSolver::Solution::takeForm()
+{
+	MatrixForm matrixForm(mInitialForm, formConverter(mForm));
 	mPhases = matrixForm.phases();
 	*this = matrixForm.matrix();
 }
@@ -110,7 +105,7 @@ void InvarianceEquationSolver::compute(const Group & group, const std::vector<si
 		mIntersectionBasis.mInitialForm = mIntersectionBasis;
 		mIntersectionBasis.mOrigin = { group.structure(), combination };
 		mIntersectionBasis.mIsGood = checkSolution();
-		mIntersectionBasis.switchFormTo(mIntersectionBasis.mForm);
+		mIntersectionBasis.takeForm();
 	}
 }
 
