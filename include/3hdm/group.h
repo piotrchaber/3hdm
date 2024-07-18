@@ -17,6 +17,7 @@ public:
 	virtual ~Group() = default;
 
 	std::vector<MyMatrix3cd> generator(size_t ith) const;
+	std::vector<MyMatrix3cd> generator(size_t ith, const std::vector<size_t> & combination) const;
 	void load(const std::string & fileDir);
 	void load(const std::string & fileName, const std::string & fileDir);
 	const size_t & numberOfGenerators() const;
