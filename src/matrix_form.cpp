@@ -129,7 +129,7 @@ static void extractColumnAndPhase(MyMatrixXcd::ColXpr & column, MyVectorXcd & ph
             phase[nonZeroElements - 2] = column[i];
             column[i] = { 1.0,0.0 };
             --nonZeroElements;
-	}
+	    }
         --i;
     }
 }

@@ -53,8 +53,8 @@ public:
 	InvarianceEquationSolver(const Particles & particles, const Form & form, const Group & group, const std::vector<size_t> & combination);
 	virtual ~InvarianceEquationSolver() = default;
 
+    void compute(const Group & group, const std::vector<size_t> & combination);
 	void compute(const Group & group);
-	void compute(const Group & group, const std::vector<size_t> & combination);
 	const std::vector<MyMatrixXcd> & eigenvectors1() const;
 	const std::vector<MyMatrixXcd> & invarianceMatrices() const;
 	const MyMatrixXcd & intersectionBasis() const;
@@ -63,12 +63,14 @@ public:
 
 protected:
 	bool checkSolution() const;
-	void findEigenvector1(const MyMatrixXcd & matrix);
+	MyMatrixXcd findEigenvectors1(const MyMatrixXcd & matrix);
 	void findEigenvectors1();
+	MyMatrixXcd findIntersectionBasis(const MyMatrixXcd & matrix1, const MyMatrixXcd & matrix2);
 	void findIntersectionBasis();
-	void findIntersectionBasis(const MyMatrixXcd & matrix1, const MyMatrixXcd & matrix2);
+	std::vector<MyMatrix3cd> prepareMatrices(const Group & group, size_t generator, const std::vector<size_t> & combination);
+	MyMatrixXcd generateInvarianceMatrix(const Group & group, size_t generator, const std::vector<size_t> & combination);
 	void generateInvarianceMatrices(const Group & group, const std::vector<size_t> & combination);
-	void generateInvarianceMatrix(std::vector<MyMatrix3cd> & matrices);
+	void prepareSolution(const Group & group, const std::vector<size_t> & combination);
 	void reset();
 	void setForm(const Form & form);
 	void setParticles(const Particles & particles);

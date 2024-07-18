@@ -12,6 +12,7 @@ set(3HDM_SOURCE
     src/invariance_equation_solver.cpp
     src/matrix_form.cpp
     src/unique_solutions_seeker.cpp
+    src/utilities.cpp
 )
 set(EXAMPLES_DIR
     ${CMAKE_SOURCE_DIR}/doc/examples/

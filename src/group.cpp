@@ -34,6 +34,20 @@ std::vector<MyMatrix3cd> Group::generator(size_t ith) const
 	return result;
 }
 
+std::vector<MyMatrix3cd> Group::generator(size_t ith, const std::vector<size_t> & combination) const
+{
+	std::vector<MyMatrix3cd> matrices{generator(ith)};
+	std::vector<MyMatrix3cd> result;
+
+	for (size_t c : combination)
+	{
+		result.push_back(matrices.at(c - 1));
+	}
+
+	return result;
+}
+
+
 void Group::load(const std::string & fileDir)
 {
     load(mStructure, fileDir);
