@@ -1,26 +1,6 @@
-#include <fstream>
-#include <iostream>
+#include "tutorial.h"
 
 #include "3hdm/representation.h"
-
-std::filesystem::path findBuildPath()
-{
-	auto buildPath = std::filesystem::current_path();
-	while (buildPath.filename() != "build")
-	{
-		buildPath = buildPath.parent_path();
-	}
-	return buildPath;
-}
-
-void print(const Representation3cd & representation)
-{
-	for (const auto & matrix : representation.matrices())
-	{
-		std::cout << matrix << '\n';
-	}
-	std::cout << '\n';
-}
 
 int main()
 {

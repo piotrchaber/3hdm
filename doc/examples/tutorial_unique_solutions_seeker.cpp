@@ -1,45 +1,6 @@
-#include <filesystem>
+#include "tutorial.h"
 
 #include "3hdm/unique_solutions_seeker.h"
-
-std::filesystem::path findBuildPath()
-{
-	auto buildPath = std::filesystem::current_path();
-	while (buildPath.filename() != "build")
-	{
-		buildPath = buildPath.parent_path();
-	}
-	return buildPath;
-}
-
-void print(UniqueSolution & unique, std::ostream & os = std::cout)
-{
-	const Eigen::IOFormat fmtVector(6, Eigen::DontAlignCols, " ", " ", "", "", "[", "]");
-	const Eigen::IOFormat fmtPhase(6, Eigen::DontAlignCols, " ", " ", "", "", "{", "}");
-
-	unique.setActualZero();
-	os << unique.transpose().format(fmtVector) << '\n'
-		<< unique.groups() << '\n';
-	if (unique.phases().empty() == false)
-	{
-		auto phases = unique.phases();
-		for (auto & phase : phases)
-		{
-			phase.setActualZero();
-			os << phase.transpose().format(fmtPhase) << " ";
-		}
-		os << '\n';
-	}
-	os << '\n';
-}
-
-void print(UniqueSolutions & uniques, std::ostream & os = std::cout)
-{
-	for (auto & unique : uniques)
-	{
-		print(unique, os);
-	}
-}
 
 int main()
 {
