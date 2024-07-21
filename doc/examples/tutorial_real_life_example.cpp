@@ -12,7 +12,7 @@ int main()
     UniqueSolutionsSeeker uniqueParticularSolutionsSeeker;
     UniqueSolutionsSeeker uniqueGeneralSolutionsSeeker;
     
-    std::vector<GroupList::Data> firstNineGroups{GroupList::Range(0, 9)};
+    std::vector<GroupList::Data> firstNineGroups{GroupList::First(9)};
     for (const auto & groupInfo : firstNineGroups)
     {
         group.setStructure(groupInfo.structure);

@@ -17,6 +17,7 @@ public:
 
 	static void Init(const std::string & path);
 	static std::vector<Data> All();
+	static std::vector<Data> First(size_t length);
 	static std::vector<Data> Order(size_t order);
 	static std::vector<Data> Orders(const std::vector<size_t> & orders);
 	static std::vector<Data> Orders(size_t from, size_t to);

@@ -46,6 +46,11 @@ std::vector<GroupList::Data> GroupList::All()
 	return mData;
 }
 
+std::vector<GroupList::Data> GroupList::First(size_t length)
+{
+	return Range(0, length);
+}
+
 std::vector<GroupList::Data> GroupList::Order(size_t order)
 {
 	std::vector<Data> result;

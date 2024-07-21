@@ -23,7 +23,10 @@ int main()
     auto random_groups = GroupList::Random(5);
     print(random_groups, "Random groups");
 
-    auto range_groups = GroupList::Range(0, 5);
+    auto first_groups = GroupList::First(5);
+    print(first_groups, "First five groups");
+
+    auto range_groups = GroupList::Range(5, 5);
     print(range_groups, "Range groups");
 
     auto selected_group = GroupList::Structure(21, 1);
