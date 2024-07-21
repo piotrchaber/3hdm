@@ -1,52 +1,6 @@
-#include <filesystem>
-#include <iostream>
+#include "tutorial.h"
 
 #include "3hdm/invariance_equation_solver.h"
-
-std::filesystem::path findBuildPath()
-{
-	auto buildPath = std::filesystem::current_path();
-	while (buildPath.filename() != "build")
-	{
-		buildPath = buildPath.parent_path();
-	}
-	return buildPath;
-}
-
-const std::string toString(const std::vector<size_t> & vector, const char & sep = ' ')
-{
-	std::string result;
-	for (size_t i = 0; i < vector.size(); ++i)
-	{
-		result += (i == vector.size() - 1) ? std::to_string(vector[i]) : std::to_string(vector[i]) + sep;
-	}
-	return result;
-}
-
-void print(Solution & solution)
-{
-	const Eigen::IOFormat fmtMatrix(6, Eigen::DontAlignCols, " ", "\n", "[", "]");
-
-	solution.setActualZero();
-	std::cout << solution.origin().group << '\n'
-		<< toString(solution.origin().combination, 'x') << " "
-		<< std::boolalpha << solution.isGood() << '\n'
-		<< solution.transpose().format(fmtMatrix) << '\n';
-}
-
-void print(Solutions & solutions)
-{
-	const Eigen::IOFormat fmtMatrix(6, Eigen::DontAlignCols, " ", "\n", "[", "]");
-
-	std::cout << (solutions.front()).origin().group << '\n';
-	for (auto & solution : solutions)
-	{
-		solution.setActualZero();
-		std::cout << toString(solution.origin().combination, 'x') << " "
-			<< std::boolalpha << solution.isGood() << '\n'
-			<< solution.transpose().format(fmtMatrix) << '\n';
-	}
-}
 
 int main()
 {

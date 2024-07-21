@@ -14,9 +14,11 @@ set(3HDM_SOURCE
     src/unique_solutions_seeker.cpp
     src/utilities.cpp
 )
+
 set(EXAMPLES_DIR
     ${CMAKE_SOURCE_DIR}/doc/examples/
 )
+
 set(EIGEN_DIR
     ${CMAKE_SOURCE_DIR}/extern/eigen/
 )
@@ -36,13 +38,13 @@ if(NOT EXISTS ${EIGEN_DIR})
     )
 endif()
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}/include/
-    ${EIGEN_DIR}
-)
-
 add_library(${PROJECT_NAME}_lib STATIC
     ${3HDM_SOURCE}
+)
+
+target_include_directories(${PROJECT_NAME}_lib PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/
+    ${EIGEN_DIR}
 )
 
 set_target_properties(${PROJECT_NAME}_lib PROPERTIES
@@ -60,6 +62,23 @@ foreach(input_file IN LISTS INPUT_FILES)
     )
 endforeach()
 
+set(TUTORIAL_SOURCE
+    ${EXAMPLES_DIR}/include/tutorial.cpp
+    ${EXAMPLES_DIR}/include/tutorial.h
+)
+
+add_library(tutorial_lib STATIC
+    ${TUTORIAL_SOURCE}
+)
+
+target_include_directories(tutorial_lib PUBLIC
+    ${EXAMPLES_DIR}/include/
+)
+
+target_link_libraries(tutorial_lib
+    ${PROJECT_NAME}_lib
+)
+
 function(add_example file_name app_name)
     add_executable(${PROJECT_NAME}_${app_name}
         ${EXAMPLES_DIR}/${file_name}
@@ -67,6 +86,7 @@ function(add_example file_name app_name)
 
     target_link_libraries(${PROJECT_NAME}_${app_name}
         ${PROJECT_NAME}_lib
+        tutorial_lib
     )
 
     set_target_properties(${PROJECT_NAME}_${app_name} PROPERTIES
@@ -82,3 +102,4 @@ add_example(tutorial_representation.cpp representation)
 add_example(tutorial_unique_solutions_seeker.cpp unique_solutions_seeker)
 add_example(tutorial_combination.cpp combination)
 add_example(tutorial_matrix_form.cpp matrix_form)
+add_example(tutorial_real_life_example.cpp real_life_example)

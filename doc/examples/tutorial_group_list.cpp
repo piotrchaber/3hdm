@@ -1,39 +1,6 @@
-#include <filesystem>
-#include <iostream>
+#include "tutorial.h"
 
 #include "3hdm/group_list.h"
-
-std::filesystem::path findBuildPath()
-{
-	auto buildPath = std::filesystem::current_path();
-	while (buildPath.filename() != "build")
-	{
-		buildPath = buildPath.parent_path();
-	}
-	return buildPath;
-}
-
-void print(const GroupList::Data & group, const std::string & message = "")
-{
-    if (message.empty() == false)
-    {
-        std::cout << message << '\n';
-    }
-    std::cout << group.structure << " " << group.gen << '\n';
-}
-
-void print(const std::vector<GroupList::Data> & groups, const std::string & message = "")
-{
-    if (message.empty() == false)
-    {
-        std::cout << message << '\n';
-    }
-
-    for (const auto & group : groups)
-    {
-        print(group);
-    }
-}
 
 int main()
 {

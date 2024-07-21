@@ -1,29 +1,6 @@
-#include <filesystem>
-#include <iostream>
+#include "tutorial.h"
 
 #include "3hdm/group.h"
-
-std::filesystem::path findBuildPath()
-{
-	auto buildPath = std::filesystem::current_path();
-	while (buildPath.filename() != "build")
-	{
-		buildPath = buildPath.parent_path();
-	}
-	return buildPath;
-}
-
-void print(const Group & group)
-{
-	for (const auto & representation : group.representations())
-	{
-		for (const auto & matrix : representation.matrices())
-		{
-			std::cout << matrix << '\n';
-		}
-	}
-	std::cout << '\n';
-}
 
 int main()
 {

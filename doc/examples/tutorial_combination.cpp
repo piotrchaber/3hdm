@@ -1,21 +1,6 @@
+#include "tutorial.h"
+
 #include "3hdm/combination.h"
-
-#include <iostream>
-
-static void print(const std::vector<size_t> & combination)
-{
-    for (auto const & coefficient : combination)
-    {
-        std::cout << coefficient << " ";
-    }
-    std::cout << '\n';
-}
-
-static void print(const std::vector<size_t> & combination, const std::string & message)
-{
-    std::cout << message << '\n';
-    print(combination);
-}
 
 int main()
 {

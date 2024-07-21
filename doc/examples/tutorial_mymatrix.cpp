@@ -1,16 +1,6 @@
-#include <iostream>
+#include "tutorial.h"
 
 #include "3hdm/mymatrix.h"
-
-std::filesystem::path findBuildPath()
-{
-	auto buildPath = std::filesystem::current_path();
-	while (buildPath.filename() != "build")
-	{
-		buildPath = buildPath.parent_path();
-	}
-	return buildPath;
-}
 
 int main()
 {
