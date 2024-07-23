@@ -80,7 +80,7 @@ static void sortByIndex(MyMatrixXcd::ColXpr & column)
     {
         subvectors.push_back(column.segment(i, 9));
     }
-	
+
     std::sort(subvectors.begin(), subvectors.end(), indexCompare);
     for (int i = 0; i < column.size(); i += 9)
     {
@@ -129,7 +129,7 @@ static void extractColumnAndPhase(MyMatrixXcd::ColXpr & column, MyVectorXcd & ph
             phase[nonZeroElements - 2] = column[i];
             column[i] = { 1.0,0.0 };
             --nonZeroElements;
-	    }
+        }
         --i;
     }
 }

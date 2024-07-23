@@ -23,7 +23,7 @@ bool isEigenvalue(std::complex<double> eigenvalue, double value)
 MyMatrixXcd eigenvectors(const MyMatrixXcd & matrix, double value)
 {
     Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;
-	ces.compute(matrix);
+    ces.compute(matrix);
 
     auto eigenvalues = ces.eigenvalues();
     auto eigenvectors = ces.eigenvectors();
@@ -46,9 +46,9 @@ MyMatrixXcd eigenvectors(const MyMatrixXcd & matrix, double value)
 MyMatrixXcd eigenspace(const MyMatrixXcd & matrix1, const MyMatrixXcd & matrix2)
 {
     MyMatrixXcd matrixOf2Eigenspaces(matrix1.rows(), matrix1.cols() + matrix2.cols());
-	matrixOf2Eigenspaces << matrix1, -1.0 * matrix2;
+    matrixOf2Eigenspaces << matrix1, -1.0 * matrix2;
 
-	Eigen::FullPivLU<Eigen::MatrixXcd> lu;
+    Eigen::FullPivLU<Eigen::MatrixXcd> lu;
     lu.compute(matrixOf2Eigenspaces);
 
     return lu.kernel();

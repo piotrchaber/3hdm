@@ -11,7 +11,7 @@ public:
     enum class Form { Original, Particular, General };
 
     MatrixForm(const MyMatrixXcd & matrix, const Form & form);
-    
+
     const MyMatrixXcd & matrix() const;
     const MyVectorXcd & phase(size_t ith) const;
     const std::vector<MyVectorXcd> & phases() const;
