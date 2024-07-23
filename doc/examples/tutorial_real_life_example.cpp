@@ -11,7 +11,7 @@ int main()
     Solutions solutions;
     UniqueSolutionsSeeker uniqueParticularSolutionsSeeker;
     UniqueSolutionsSeeker uniqueGeneralSolutionsSeeker;
-    
+
     std::vector<GroupList::Data> firstNineGroups{GroupList::First(9)};
     for (const auto & groupInfo : firstNineGroups)
     {
@@ -30,7 +30,7 @@ int main()
 
     UniqueSolutions uniqueParticularSolutions{uniqueParticularSolutionsSeeker.items()};
     std::cout << "Unique particular solutions:" << '\n';
-	print(uniqueParticularSolutions);
+    print(uniqueParticularSolutions);
 
     UniqueSolutions uniqueGeneralSolutions{uniqueGeneralSolutionsSeeker.items()};
     std::cout << "Unique general solutions:" << '\n';

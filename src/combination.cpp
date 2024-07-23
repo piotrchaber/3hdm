@@ -68,7 +68,7 @@ bool Combination::isValid(const std::vector<size_t> & combination) const
 bool Combination::next()
 {
     int index = mUniqueCoefficients.size() - 1;
-    
+
     mReducedCombination[index]++;
     while (mReducedCombination[index] == mNumbersUpTo + 1)
     {
@@ -78,7 +78,7 @@ bool Combination::next()
     }
 
     extend();
-	
+
     auto predicate = [](auto coefficient) { return coefficient != 1; };
     return std::any_of(mReducedCombination.begin(), mReducedCombination.end(), predicate);
 }
@@ -96,7 +96,7 @@ bool Combination::previous()
     }
 
     extend();
-	
+
     auto predicate = [&](auto coefficient) { return coefficient != mNumbersUpTo; };
     return std::any_of(mReducedCombination.begin(), mReducedCombination.end(), predicate);
 }
