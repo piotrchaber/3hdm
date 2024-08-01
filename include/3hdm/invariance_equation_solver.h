@@ -1,5 +1,5 @@
-#ifndef INVARIANCEEQUATIONSOLVER_H
-#define INVARIANCEEQUATIONSOLVER_H
+#ifndef INCLUDE_3HDM_INVARIANCE_EQUATION_SOLVER_H
+#define INCLUDE_3HDM_INVARIANCE_EQUATION_SOLVER_H
 
 #include <map>
 #include <string>
@@ -17,8 +17,8 @@ public:
     {
         struct Origin
         {
-            std::string group;
-            std::vector<size_t> combination;
+            std::string group{};
+            std::vector<size_t> combination{};
         };
 
     public:
@@ -26,31 +26,30 @@ public:
 
         virtual ~Solution() = default;
 
-        const bool & isGood() const;
-        const Form & form() const;
+        bool isGood() const;
+        Form form() const;
         const Origin & origin() const;
-        const MyVectorXcd & phase(size_t ith) const;
-        int phases() const;
-        void switchFormTo(Form form);
+        const MyVectorXcd & phase(const size_t ith) const;
+        size_t phases() const;
+        void switchFormTo(const Form form);
 
     private:
         void takeForm();
 
         using MyMatrixXcd::operator=;
-        Form mForm;
-        Origin mOrigin;
-        bool mIsGood = false;
-        std::vector<MyVectorXcd> mPhases;
-        MyMatrixXcd mInitialForm;
+        Form form_{};
+        Origin origin_{};
+        bool is_good_{false};
+        std::vector<MyVectorXcd> phases_{};
+        MyMatrixXcd initial_form_{};
         friend class InvarianceEquationSolver;
     };
 
     enum class Particles { ChargedLeptons, DiracNeutrino, MajoranaNeutrino };
-    typedef Solution::Form Form;
 
-    InvarianceEquationSolver(const Particles & particles, const Form & form);
-    InvarianceEquationSolver(const Particles & particles, const Form & form, const Group & group);
-    InvarianceEquationSolver(const Particles & particles, const Form & form, const Group & group, const std::vector<size_t> & combination);
+    InvarianceEquationSolver(const Particles particles, const Solution::Form form);
+    InvarianceEquationSolver(const Particles particles, const Solution::Form form, const Group & group);
+    InvarianceEquationSolver(const Particles particles, const Solution::Form form, const Group & group, const std::vector<size_t> & combination);
     virtual ~InvarianceEquationSolver() = default;
 
     void compute(const Group & group, const std::vector<size_t> & combination);
@@ -61,35 +60,34 @@ public:
     const Solution & solution() const;
     const std::vector<Solution> & solutions() const;
 
-protected:
-    bool checkSolution() const;
-    MyMatrixXcd findEigenvectors1(const MyMatrixXcd & matrix);
-    void findEigenvectors1();
-    MyMatrixXcd findIntersectionBasis(const MyMatrixXcd & matrix1, const MyMatrixXcd & matrix2);
-    void findIntersectionBasis();
-    std::vector<MyMatrix3cd> prepareMatrices(const Group & group, size_t generator, const std::vector<size_t> & combination);
-    MyMatrixXcd generateInvarianceMatrix(const Group & group, size_t generator, const std::vector<size_t> & combination);
-    void generateInvarianceMatrices(const Group & group, const std::vector<size_t> & combination);
-    void prepareSolution(const Group & group, const std::vector<size_t> & combination);
-    void reset();
-    void setForm(const Form & form);
-    void setParticles(const Particles & particles);
-
 private:
     enum class EquationState { NoProblem, NoEigenvectors, NoEigensubspace };
 
-    EquationState mEquationState = EquationState::NoProblem;
-    std::vector<MyMatrixXcd> mInvarianceMatrices;
-    std::vector<MyMatrixXcd> mEigenvectors1;
-    MyMatrixXcd mIntersectionBasis;
-    Solution mSolution;
-    std::vector<Solution> mSolutions;
-    std::string mShape;
-    std::string mOperation;
+    bool checkSolution() const;
+    MyMatrixXcd findEigenvectors1(const MyMatrixXcd & matrix);
+    void findEigenvectors1();
+    MyMatrixXcd findIntersectionBasis(const MyMatrixXcd & lhs_matrix, const MyMatrixXcd & rhs_matrix);
+    void findIntersectionBasis();
+    std::vector<MyMatrix3cd> prepareMatrices(const Group & group, const size_t ith_generator, const std::vector<size_t> & combination);
+    MyMatrixXcd generateInvarianceMatrix(const Group & group, const size_t ith_generator, const std::vector<size_t> & combination);
+    void generateInvarianceMatrices(const Group & group, const std::vector<size_t> & combination);
+    void prepareSolution(const Group & group, const std::vector<size_t> & combination);
+    void reset();
+    void setForm(const Solution::Form form);
+    void setParticles(const Particles particles);
+
+    EquationState equation_state_{EquationState::NoProblem};
+    std::vector<MyMatrixXcd> invariance_matrices_{};
+    std::vector<MyMatrixXcd> eigenvectors1_{};
+    MyMatrixXcd intersection_basis_{};
+    Solution solution_{};
+    std::vector<Solution> solutions_{};
+    std::string shape_{};
+    std::string operation_{};
 };
 
 typedef InvarianceEquationSolver::Particles Particles;
 typedef InvarianceEquationSolver::Solution Solution;
 typedef std::vector<InvarianceEquationSolver::Solution> Solutions;
 
-#endif // INVARIANCEEQUATIONSOLVER_H
+#endif  // INCLUDE_3HDM_INVARIANCE_EQUATION_SOLVER_H

@@ -1,32 +1,35 @@
 #include "3hdm/group.h"
 
+#include <cassert>
 #include <filesystem>
 
 Group::Group(const std::string & structure)
-    : mStructure(structure), mNumberOfGenerators(0)
+    : structure_(structure), number_of_generators_(0)
 {
 }
 
-Group::Group(const std::string & structure, size_t numberOfGenerators)
-    : mStructure(structure), mNumberOfGenerators(numberOfGenerators)
+Group::Group(const std::string & structure, const size_t number_of_generators)
+    : structure_(structure), number_of_generators_(number_of_generators)
 {
 }
 
 Group::Group(const std::vector<Representation3cd> & representations, const std::string & structure)
-    : mRepresentations(representations), mStructure(structure), mNumberOfGenerators(0)
+    : representations_(representations), structure_(structure), number_of_generators_(0)
 {
 }
 
-Group::Group(const std::vector<Representation3cd> & representations, const std::string & structure, size_t numberOfGenerators)
-    : mRepresentations(representations), mStructure(structure), mNumberOfGenerators(numberOfGenerators)
+Group::Group(const std::vector<Representation3cd> & representations, const std::string & structure, const size_t number_of_generators)
+    : representations_(representations), structure_(structure), number_of_generators_(number_of_generators)
 {
 }
 
-std::vector<MyMatrix3cd> Group::generator(size_t ith) const
+std::vector<MyMatrix3cd> Group::generator(const size_t ith) const
 {
-    std::vector<MyMatrix3cd> result;
+    assert((ith > 0 || ith <= number_of_generators_) && "Generator number has been exceeded");
 
-    for (const auto & representation : mRepresentations)
+    std::vector<MyMatrix3cd> result{};
+
+    for (const auto & representation : representations_)
     {
         result.push_back(representation.matrices().at(ith - 1));
     }
@@ -34,12 +37,12 @@ std::vector<MyMatrix3cd> Group::generator(size_t ith) const
     return result;
 }
 
-std::vector<MyMatrix3cd> Group::generator(size_t ith, const std::vector<size_t> & combination) const
+std::vector<MyMatrix3cd> Group::generator(const size_t ith, const std::vector<size_t> & combination) const
 {
-    std::vector<MyMatrix3cd> matrices{generator(ith)};
-    std::vector<MyMatrix3cd> result;
+    const std::vector<MyMatrix3cd> matrices{generator(ith)};
+    std::vector<MyMatrix3cd> result{};
 
-    for (size_t coefficient : combination)
+    for (const auto coefficient : combination)
     {
         result.push_back(matrices.at(coefficient - 1));
     }
@@ -48,91 +51,88 @@ std::vector<MyMatrix3cd> Group::generator(size_t ith, const std::vector<size_t> 
 }
 
 
-void Group::load(const std::string & fileDir)
+void Group::load(const std::string & file_directory)
 {
-    load(mStructure, fileDir);
+    load(structure_, file_directory);
 }
 
-void Group::load(const std::string & fileName, const std::string & fileDir)
+void Group::load(const std::string & file_name, const std::string & file_directory)
 {
-    auto filePath = std::filesystem::path(fileDir + '/' + fileName);
-    std::fstream ifile;
-    ifile.open(filePath, std::ios::in);
-    if (ifile.is_open() == false)
+    const std::filesystem::path file_path{file_directory + '/' + file_name};
+    std::fstream ifile{};
+
+    ifile.open(file_path, std::ios::in);
+    if (false == ifile.is_open())
     {
-        std::cerr << filePath << " file not opening properly!" << '\n';
+        std::cerr << file_path << " file not opening properly!" << '\n';
         exit(EXIT_FAILURE);
     }
 
-    MyMatrix3cd matrix;
-    std::vector<MyMatrix3cd> matrices;
-    std::string matrixRow;
-    std::stringstream ss;
-    size_t dimController = 0;
-    size_t genController = 0;
+    MyMatrix3cd matrix{};
+    std::vector<MyMatrix3cd> matrices{};
+    std::string matrix_row{};
+    std::stringstream ss{};
+    size_t dimension{0};
+    size_t generators{0};
 
-    mRepresentations.clear();
-    while (std::getline(ifile, matrixRow))
+    representations_.clear();
+    while (std::getline(ifile, matrix_row))
     {
-        ss << matrixRow + '\n';
-        if (++dimController == 3)
+        ss << matrix_row + '\n';
+        if (3 == ++dimension)
         {
-            ++genController;
+            ++generators;
             matrix.load(ss);
             matrices.push_back(matrix);
             ss.str(std::string());
             ss.clear();
-            dimController = 0;
+            dimension = 0;
         }
-        if (genController == mNumberOfGenerators)
+        if (generators == number_of_generators_)
         {
-            mRepresentations.push_back(Representation3cd(matrices));
+            representations_.push_back(Representation3cd(matrices));
             matrices.clear();
-            genController = 0;
+            generators = 0;
         }
     }
 }
 
-const size_t & Group::numberOfGenerators() const
+size_t Group::numberOfGenerators() const
 {
-    return mNumberOfGenerators;
+    return number_of_generators_;
 }
 
 size_t Group::numberOfRepresentations() const
 {
-    return mRepresentations.size();
+    return representations_.size();
 }
 
-const Representation3cd & Group::representation(size_t ith) const
+const Representation3cd & Group::representation(const size_t ith) const
 {
-    return mRepresentations.at(ith - 1);
+    return representations_.at(ith - 1);
 }
 
 const std::vector<Representation3cd> & Group::representations() const
 {
-    return mRepresentations;
+    return representations_;
 }
 
-void Group::setNumberOfGenerators(size_t numberOfGenerators)
+void Group::setNumberOfGenerators(const size_t number_of_generators)
 {
-    mNumberOfGenerators = numberOfGenerators;
+    number_of_generators_ = number_of_generators;
 }
 
 void Group::setRepresentations(const std::vector<Representation3cd> & representations)
 {
-    mRepresentations = representations;
+    representations_ = representations;
 }
 
 void Group::setStructure(const std::string & structure)
 {
-    mStructure = structure;
+    structure_ = structure;
 }
 
 const std::string & Group::structure() const
 {
-    return mStructure;
+    return structure_;
 }
-
-// TODO: write an assert for ith < 1 && ith > mNumberOfGenerators in generator method
-// TODO: examine the case when the mNumberOfGenerators is equal to 0 (exception)
-// TODO: break loadFromFile method into smaller functions

@@ -1,7 +1,6 @@
-#ifndef GROUPLIST_H
-#define GROUPLIST_H
+#ifndef INCLUDE_3HDM_GROUP_LIST_H
+#define INCLUDE_3HDM_GROUP_LIST_H
 
-#include <map>
 #include <string>
 #include <vector>
 
@@ -11,30 +10,29 @@ public:
     struct Data
     {
         std::string structure;
-        size_t gen;
+        size_t generators;
         bool operator<(const Data & right) const;
     };
 
     static void Init(const std::string & path);
     static std::vector<Data> All();
-    static std::vector<Data> First(size_t length);
-    static std::vector<Data> Order(size_t order);
+    static std::vector<Data> First(const size_t length);
+    static std::vector<Data> Order(const size_t order);
     static std::vector<Data> Orders(const std::vector<size_t> & orders);
-    static std::vector<Data> Orders(size_t from, size_t to);
+    static std::vector<Data> Orders(const size_t from, const size_t to);
     static Data Random();
-    static std::vector<Data> Random(size_t howMany);
-    static std::vector<Data> Range(size_t first, size_t length);
-    static Data Structure(size_t order, size_t id);
+    static std::vector<Data> Random(const size_t how_many);
+    static std::vector<Data> Range(const size_t first, const size_t length);
+    static Data Structure(const size_t order, const size_t id);
     static std::vector<Data> Structures(const std::vector<std::pair<size_t, size_t>> & structures);
 
-protected:
+private:
     static std::vector<Data> loadData();
-    static std::vector<int> loadGens();
+    static std::vector<size_t> loadGenerators();
     static std::vector<std::string> loadStructures();
 
-private:
-    static std::string mPath;
-    static std::vector<Data> mData;
+    static std::string path_;
+    static std::vector<Data> data_;
 };
 
-#endif // GROUPLIST_H
+#endif  // INCLUDE_3HDM_GROUP_LIST_H

@@ -4,23 +4,23 @@
 
 int main()
 {
-    MyMatrixXcd matrix(MyMatrixXcd::Random(27, 3));
+    const MyMatrixXcd matrix(MyMatrixXcd::Random(27, 3));
     std::cout << "initial matrix" << '\n' << matrix << "\n\n";
 
-    MatrixForm matrixFormGeneral(matrix, MatrixForm::Form::General);
-    print(matrixFormGeneral, "general form");
+    const MatrixForm matrix_form_general(matrix, MatrixForm::Form::General);
+    print(matrix_form_general, "general form");
 
-    MatrixForm matrixFormParticular(matrix, MatrixForm::Form::Particular);
-    print(matrixFormParticular, "particular form");
+    const MatrixForm matrix_form_particular(matrix, MatrixForm::Form::Particular);
+    print(matrix_form_particular, "particular form");
 
-    MatrixForm matrixFormOriginal(matrix, MatrixForm::Form::Original);
-    print(matrixFormOriginal, "original form");
+    const MatrixForm matrix_form_original(matrix, MatrixForm::Form::Original);
+    print(matrix_form_original, "original form");
 
-    MyMatrixXcd matrixZero(MyMatrixXcd::Zero(27, 3));
-    MatrixForm matrixZeroForm(matrixZero, MatrixForm::Form::General);
-    print(matrixZeroForm, "general form of zero matrix");
+    const MyMatrixXcd matrix_zero(MyMatrixXcd::Zero(27, 3));
+    const MatrixForm matrix_zero_form_general(matrix_zero, MatrixForm::Form::General);
+    print(matrix_zero_form_general, "general form of zero matrix");
 
-    MyMatrixXcd matrixIdentity(MyMatrixXcd::Identity(27, 3));
-    MatrixForm matrixIdentityForm(matrixIdentity, MatrixForm::Form::General);
-    print(matrixIdentityForm, "general form of identity matrix");
+    const MyMatrixXcd matrix_identity(MyMatrixXcd::Identity(27, 3));
+    const MatrixForm matrix_identity_form_general(matrix_identity, MatrixForm::Form::General);
+    print(matrix_identity_form_general, "general form of identity matrix");
 }

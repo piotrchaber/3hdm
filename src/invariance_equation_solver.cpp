@@ -4,32 +4,10 @@
 #include "Eigen/Eigenvalues"
 #include "unsupported/Eigen/KroneckerProduct"
 
-const bool & InvarianceEquationSolver::Solution::isGood() const
+namespace
 {
-    return mIsGood;
-}
 
-const InvarianceEquationSolver::Solution::Form & InvarianceEquationSolver::Solution::form() const
-{
-    return mForm;
-}
-
-const InvarianceEquationSolver::Solution::Origin & InvarianceEquationSolver::Solution::origin() const
-{
-    return mOrigin;
-}
-
-const MyVectorXcd & InvarianceEquationSolver::Solution::phase(size_t ith) const
-{
-    return mPhases.at(ith);
-}
-
-int InvarianceEquationSolver::Solution::phases() const
-{
-    return mPhases.size();
-}
-
-static MatrixForm::Form formConverter(InvarianceEquationSolver::Solution::Form form)
+MatrixForm::Form formConverter(const InvarianceEquationSolver::Solution::Form form)
 {
     switch (form)
     {
@@ -42,36 +20,63 @@ static MatrixForm::Form formConverter(InvarianceEquationSolver::Solution::Form f
     }
 }
 
-void InvarianceEquationSolver::Solution::switchFormTo(Form form)
+}
+
+bool InvarianceEquationSolver::Solution::isGood() const
 {
-    if (mForm != form)
+    return is_good_;
+}
+
+InvarianceEquationSolver::Solution::Form InvarianceEquationSolver::Solution::form() const
+{
+    return form_;
+}
+
+const InvarianceEquationSolver::Solution::Origin & InvarianceEquationSolver::Solution::origin() const
+{
+    return origin_;
+}
+
+const MyVectorXcd & InvarianceEquationSolver::Solution::phase(const size_t ith) const
+{
+    return phases_.at(ith);
+}
+
+size_t InvarianceEquationSolver::Solution::phases() const
+{
+    return phases_.size();
+}
+
+void InvarianceEquationSolver::Solution::switchFormTo(const Form form)
+{
+    if (form != form_)
     {
-        mForm = form;
+        form_ = form;
         takeForm();
     }
 }
 
 void InvarianceEquationSolver::Solution::takeForm()
 {
-    MatrixForm matrixForm(mInitialForm, formConverter(mForm));
-    mPhases = matrixForm.phases();
-    *this = matrixForm.matrix();
+    const MatrixForm matrix_form(initial_form_, formConverter(form_));
+    phases_ = matrix_form.phases();
+    *this = matrix_form.matrix();
 }
 
-InvarianceEquationSolver::InvarianceEquationSolver(const Particles & particles, const Form & form)
+InvarianceEquationSolver::InvarianceEquationSolver(const Particles particles, const InvarianceEquationSolver::Solution::Form form)
 {
     setParticles(particles);
     setForm(form);
 }
 
-InvarianceEquationSolver::InvarianceEquationSolver(const Particles & particles, const Form & form, const Group & group)
+InvarianceEquationSolver::InvarianceEquationSolver(const Particles particles, const InvarianceEquationSolver::Solution::Form form, const Group & group)
 {
     setParticles(particles);
     setForm(form);
     compute(group);
 }
 
-InvarianceEquationSolver::InvarianceEquationSolver(const Particles & particles, const Form & form, const Group & group, const std::vector<size_t> & combination)
+InvarianceEquationSolver::InvarianceEquationSolver(const Particles particles, const InvarianceEquationSolver::Solution::Form form, const Group & group, const std::vector<size_t> & combination)
 {
     setParticles(particles);
     setForm(form);
@@ -83,23 +88,23 @@ void InvarianceEquationSolver::compute(const Group & group, const std::vector<si
     reset();
     generateInvarianceMatrices(group, combination);
     findEigenvectors1();
-    if (EquationState::NoEigenvectors == mEquationState) { return; }
+    if (EquationState::NoEigenvectors == equation_state_) { return; }
     findIntersectionBasis();
-    if (EquationState::NoEigensubspace == mEquationState) { return; }
+    if (EquationState::NoEigensubspace == equation_state_) { return; }
     prepareSolution(group, combination);
 }
 
 void InvarianceEquationSolver::compute(const Group & group)
 {
-    Combination combination(mShape, group.numberOfRepresentations());
+    Combination combination(shape_, group.numberOfRepresentations());
 
-    mSolutions.clear();
+    solutions_.clear();
     do
     {
         compute(group, combination.get());
-        if (EquationState::NoProblem == mEquationState)
+        if (EquationState::NoProblem == equation_state_)
         {
-            mSolutions.push_back(mSolution);
+            solutions_.push_back(solution_);
         }
     } while (combination.next());
     reset();
@@ -107,36 +112,36 @@ void InvarianceEquationSolver::compute(const Group & group)
 
 const std::vector<MyMatrixXcd> & InvarianceEquationSolver::eigenvectors1() const
 {
-    return mEigenvectors1;
+    return eigenvectors1_;
 }
 
 const std::vector<MyMatrixXcd> & InvarianceEquationSolver::invarianceMatrices() const
 {
-    return mInvarianceMatrices;
+    return invariance_matrices_;
 }
 
 const MyMatrixXcd & InvarianceEquationSolver::intersectionBasis() const
 {
-    return mIntersectionBasis;
+    return intersection_basis_;
 }
 
 const InvarianceEquationSolver::Solution & InvarianceEquationSolver::solution() const
 {
-    return mSolution;
+    return solution_;
 }
 
 const std::vector<InvarianceEquationSolver::Solution> & InvarianceEquationSolver::solutions() const
 {
-    return mSolutions;
+    return solutions_;
 }
 
 bool InvarianceEquationSolver::checkSolution() const
 {
-    for (const auto & solution : mSolution.mInitialForm.colwise())
+    for (const auto & solution : solution_.initial_form_.colwise())
     {
-        for (const auto & invarianceMatrix : mInvarianceMatrices)
+        for (const auto & invariance_matrix : invariance_matrices_)
         {
-            if ((invarianceMatrix * solution).isApprox(solution, 0.0001) == false)
+            if (false == (invariance_matrix * solution).isApprox(solution, 0.0001))
             {
                 return false;
             }
@@ -156,64 +161,64 @@ MyMatrixXcd InvarianceEquationSolver::findEigenvectors1(const MyMatrixXcd & matr
 
 void InvarianceEquationSolver::findEigenvectors1()
 {
-    MyMatrixXcd eigenvectors1;
+    MyMatrixXcd eigenvectors1{};
 
-    for (auto const invarianceMatrix : mInvarianceMatrices)
+    for (auto const invariance_matrix : invariance_matrices_)
     {
-        eigenvectors1 = findEigenvectors1(invarianceMatrix);
+        eigenvectors1 = findEigenvectors1(invariance_matrix);
         if (0 == eigenvectors1.cols())
         {
-            mEquationState = EquationState::NoEigenvectors;
+            equation_state_ = EquationState::NoEigenvectors;
             return;
         }
-        mEigenvectors1.push_back(eigenvectors1);
+        eigenvectors1_.push_back(eigenvectors1);
     }
 }
 
-MyMatrixXcd InvarianceEquationSolver::findIntersectionBasis(const MyMatrixXcd & matrix1, const MyMatrixXcd & matrix2)
+MyMatrixXcd InvarianceEquationSolver::findIntersectionBasis(const MyMatrixXcd & lhs_matrix, const MyMatrixXcd & rhs_matrix)
 {
-    MyMatrixXcd nullSpace{eigenspace(matrix1, matrix2)};
-    MyMatrixXcd intersectionBasis(matrix1.rows(), nullSpace.cols());
-    MyVectorXcd baseVector;
+    const MyMatrixXcd null_space{eigenspace(lhs_matrix, rhs_matrix)};
+    MyMatrixXcd intersection_basis(lhs_matrix.rows(), null_space.cols());
+    MyVectorXcd base_vector{};
 
-    for (auto i = 0; i < nullSpace.cols(); ++i)
+    for (auto i = 0; i < null_space.cols(); ++i)
     {
-        baseVector.setZero(matrix1.rows());
-        for (auto j = 0; j < matrix1.cols(); ++j)
+        base_vector.setZero(lhs_matrix.rows());
+        for (auto j = 0; j < lhs_matrix.cols(); ++j)
         {
-            baseVector += nullSpace.col(i)(j) * matrix1.col(j);
+            base_vector += null_space.col(i)(j) * lhs_matrix.col(j);
         }
-        intersectionBasis.col(i) = baseVector;
+        intersection_basis.col(i) = base_vector;
     }
 
-    return intersectionBasis;
+    return intersection_basis;
 }
 
 void InvarianceEquationSolver::findIntersectionBasis()
 {
-    mIntersectionBasis = mEigenvectors1[0];
-    for (auto i = 1; i < mEigenvectors1.size(); ++i)
+    intersection_basis_ = eigenvectors1_.at(0);
+    for (auto i = 1; i < eigenvectors1_.size(); ++i)
     {
-        mIntersectionBasis = findIntersectionBasis(mIntersectionBasis, mEigenvectors1.at(i));
-        if (mIntersectionBasis.isZero())
+        intersection_basis_ = findIntersectionBasis(intersection_basis_, eigenvectors1_.at(i));
+        if (intersection_basis_.isZero())
         {
-            mEquationState = EquationState::NoEigensubspace;
+            equation_state_ = EquationState::NoEigensubspace;
             return;
         }
     }
 }
 
-std::vector<MyMatrix3cd> InvarianceEquationSolver::prepareMatrices(const Group & group, size_t generator, const std::vector<size_t> & combination)
+std::vector<MyMatrix3cd> InvarianceEquationSolver::prepareMatrices(const Group & group, const size_t ith_generator, const std::vector<size_t> & combination)
 {
-    std::vector<MyMatrix3cd> matrices{group.generator(generator, combination)};
+    std::vector<MyMatrix3cd> matrices{group.generator(ith_generator, combination)};
 
-    for (size_t i = 0; i < mOperation.size(); ++i)
+    for (auto i = 0; i < operation_.size(); ++i)
     {
-        if (mOperation[i] == 'A')
+        if (operation_[i] == 'A')
         {
             matrices[i].adjointInPlace();
         }
-        if (mOperation[i] == 'T')
+        if (operation_[i] == 'T')
         {
             matrices[i].transposeInPlace();
         }
@@ -222,50 +227,50 @@ std::vector<MyMatrix3cd> InvarianceEquationSolver::prepareMatrices(const Group &
     return matrices;
 }
 
-MyMatrixXcd InvarianceEquationSolver::generateInvarianceMatrix(const Group & group, size_t generator, const std::vector<size_t> & combination)
+MyMatrixXcd InvarianceEquationSolver::generateInvarianceMatrix(const Group & group, const size_t ith_generator, const std::vector<size_t> & combination)
 {
-    std::vector<MyMatrix3cd> matrices{prepareMatrices(group, generator, combination)};
+    const std::vector<MyMatrix3cd> matrices{prepareMatrices(group, ith_generator, combination)};
     return kroneckerProduct(matrices);
 }
 
 void InvarianceEquationSolver::generateInvarianceMatrices(const Group & group, const std::vector<size_t> & combination)
 {
-    MyMatrixXcd invarianceMatrix;
+    MyMatrixXcd invariance_matrix{};
 
     for (auto i = 1; i <= group.numberOfGenerators(); ++i)
     {
-        invarianceMatrix = generateInvarianceMatrix(group, i, combination);
-        mInvarianceMatrices.push_back(invarianceMatrix);
+        invariance_matrix = generateInvarianceMatrix(group, i, combination);
+        invariance_matrices_.push_back(invariance_matrix);
     }
 }
 
 void InvarianceEquationSolver::prepareSolution(const Group & group, const std::vector<size_t> & combination)
 {
-    mSolution.mInitialForm = mIntersectionBasis;
-    mSolution.mOrigin = { group.structure(), combination };
-    mSolution.mIsGood = checkSolution();
-    mSolution.takeForm();
+    solution_.initial_form_ = intersection_basis_;
+    solution_.origin_ = { group.structure(), combination };
+    solution_.is_good_ = checkSolution();
+    solution_.takeForm();
 }
 
 void InvarianceEquationSolver::reset()
 {
-    mEquationState = EquationState::NoProblem;
-    mInvarianceMatrices.clear();
-    mEigenvectors1.clear();
-    mIntersectionBasis.resize(0, 0);
-    mSolution.resize(0, 0);
+    equation_state_ = EquationState::NoProblem;
+    invariance_matrices_.clear();
+    eigenvectors1_.clear();
+    intersection_basis_.resize(0, 0);
+    solution_.resize(0, 0);
 }
 
-void InvarianceEquationSolver::setForm(const Form & form)
+void InvarianceEquationSolver::setForm(const InvarianceEquationSolver::Solution::Form form)
 {
-    mSolution.mForm = form;
+    solution_.form_ = form;
 }
 
-void InvarianceEquationSolver::setParticles(const Particles & particles)
+void InvarianceEquationSolver::setParticles(const Particles particles)
 {
     const std::string shapes[3] = { "ABC", "ABC", "AABB" };
     const std::string operations[3] = { "AAT", "TAT", "TTAA" };
 
-    mShape = shapes[static_cast<int>(particles)];
-    mOperation = operations[static_cast<int>(particles)];
+    shape_ = shapes[static_cast<int>(particles)];
+    operation_ = operations[static_cast<int>(particles)];
 }

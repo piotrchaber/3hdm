@@ -4,18 +4,18 @@
 
 int main()
 {
-    auto buildPath = findBuildPath();
+    const auto build_path = findBuildPath();
 
     Group group("tutorial_group", 2);
-    group.load(buildPath);
+    group.load(build_path);
 
     InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular, group);
-    Solutions solutions = ies.solutions();
+    auto solutions = ies.solutions();
 
-    UniqueSolutionsSeeker ussp;
+    UniqueSolutionsSeeker ussp{};
     ussp.find(solutions);
-    UniqueSolutions usp;
-    usp = ussp.items();
+
+    const UniqueSolutions usp{ussp.items()};
     std::cout << "Unique particular solutions:" << '\n';
     print(usp);
 
@@ -24,10 +24,10 @@ int main()
         solution.switchFormTo(Solution::Form::General);
     }
 
-    UniqueSolutionsSeeker ussg;
+    UniqueSolutionsSeeker ussg{};
     ussg.find(solutions);
-    UniqueSolutions usg;
-    usg = ussg.items();
+
+    const UniqueSolutions usg{ussg.items()};
     std::cout << "Unique general solutions:" << '\n';
     print(usg);
 }

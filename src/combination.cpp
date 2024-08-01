@@ -3,113 +3,123 @@
 #include <algorithm>
 #include <set>
 
-Combination::Combination(const std::string & base, size_t numbersUpTo)
-    : mBase(base), mNumbersUpTo(numbersUpTo)
+Combination::Combination(const std::string & base, const size_t numbers_up_to)
+    : base_(base), numbers_up_to_(numbers_up_to)
 {
     findUniqueCoefficients();
-    set(LowerLimitExtendedCombination());
+    set(kLowerLimitExtendedCombination());
 }
 
-Combination::Combination(const std::string & base, size_t numbersUpTo, const std::vector<size_t> & initialCombination)
-    : mBase(base), mNumbersUpTo(numbersUpTo)
+Combination::Combination(const std::string & base, const size_t numbers_up_to, const std::vector<size_t> & initial_combination)
+    : base_(base), numbers_up_to_(numbers_up_to)
 {
     findUniqueCoefficients();
-    set(initialCombination);
+    set(initial_combination);
 }
 
 void Combination::extend()
 {
-    int reducedIndex = 0;
-    for (auto & uniqueCoefficient : mUniqueCoefficients)
+    size_t reduced_index{0};
+    for (auto & unique_coefficient : unique_coefficients_)
     {
-        uniqueCoefficient.second = mReducedCombination.at(reducedIndex++);
+        unique_coefficient.second = reduced_combination_.at(reduced_index++);
     }
 
-    int extendedIndex = 0;
-    for (auto const & coefficient : mBase)
+    size_t extended_index{0};
+    for (auto const & coefficient : base_)
     {
-        mExtendedCombination.at(extendedIndex++) = mUniqueCoefficients[coefficient];
+        extended_combination_.at(extended_index++) = unique_coefficients_[coefficient];
     }
 }
 
 void Combination::findUniqueCoefficients()
 {
-    for (auto const & coefficient : mBase) { mUniqueCoefficients[toupper(coefficient)]; }
+    for (auto const & coefficient : base_) { unique_coefficients_[toupper(coefficient)]; }
 }
 
 const std::vector<size_t> & Combination::get() const
 {
-    return mExtendedCombination;
+    return extended_combination_;
 }
 
 void Combination::invalidate()
 {
-    mReducedCombination = LowerLimitReducedCombination();
-    mExtendedCombination = LowerLimitExtendedCombination();
+    reduced_combination_ = kLowerLimitReducedCombination();
+    extended_combination_ = kLowerLimitExtendedCombination();
 }
 
 bool Combination::isValid(const std::vector<size_t> & combination) const
 {
-    auto predicate = [&](auto coefficient) { return coefficient > mNumbersUpTo; };
-    if ((mBase.size() != combination.size()) || std::any_of(combination.begin(), combination.end(), predicate))
+    auto predicate = [&](auto coefficient) { return coefficient > numbers_up_to_; };
+    if ((base_.size() != combination.size()) || std::any_of(combination.begin(), combination.end(), predicate))
     {
         return false;
     }
 
-    std::set<std::string> uniquePairs;
-    for (auto index = 0; index < mBase.size(); ++index)
+    std::set<std::string> unique_pairs{};
+    for (auto index = 0; index < base_.size(); ++index)
     {
-        uniquePairs.insert(mBase.at(index) + std::to_string(combination.at(index)));
+        unique_pairs.insert(base_.at(index) + std::to_string(combination.at(index)));
     }
 
-    return mUniqueCoefficients.size() == uniquePairs.size();
+    return unique_coefficients_.size() == unique_pairs.size();
+}
+
+std::vector<size_t> Combination::kLowerLimitExtendedCombination() const
+{
+    return std::vector<size_t>(base_.size(), 1);
+}
+
+std::vector<size_t> Combination::kLowerLimitReducedCombination() const
+{
+    return std::vector<size_t>(unique_coefficients_.size(), 1);
 }
 
 bool Combination::next()
 {
-    int index = mUniqueCoefficients.size() - 1;
+    size_t index{unique_coefficients_.size() - 1};
 
-    mReducedCombination[index]++;
-    while (mReducedCombination[index] == mNumbersUpTo + 1)
+    reduced_combination_[index]++;
+    while (numbers_up_to_ + 1 == reduced_combination_[index])
     {
-        mReducedCombination[index] = 1;
-        if (index == 0) break;
-        mReducedCombination[--index]++;
+        reduced_combination_[index] = 1;
+        if (0 == index) break;
+        reduced_combination_[--index]++;
     }
 
     extend();
 
-    auto predicate = [](auto coefficient) { return coefficient != 1; };
-    return std::any_of(mReducedCombination.begin(), mReducedCombination.end(), predicate);
+    auto predicate = [](auto coefficient) { return 1 != coefficient; };
+    return std::any_of(reduced_combination_.begin(), reduced_combination_.end(), predicate);
 }
 
 bool Combination::previous()
 {
-    int index = mUniqueCoefficients.size() - 1;
+    size_t index{unique_coefficients_.size() - 1};
 
-    mReducedCombination[index]--;
-    while (mReducedCombination[index] == 0)
+    reduced_combination_[index]--;
+    while (0 == reduced_combination_[index])
     {
-        mReducedCombination[index] = mNumbersUpTo;
-        if (index == 0) break;
-        mReducedCombination[--index]--;
+        reduced_combination_[index] = numbers_up_to_;
+        if (0 == index) break;
+        reduced_combination_[--index]--;
     }
 
     extend();
 
-    auto predicate = [&](auto coefficient) { return coefficient != mNumbersUpTo; };
-    return std::any_of(mReducedCombination.begin(), mReducedCombination.end(), predicate);
+    auto predicate = [&](auto coefficient) { return numbers_up_to_ != coefficient; };
+    return std::any_of(reduced_combination_.begin(), reduced_combination_.end(), predicate);
 }
 
 void Combination::reduce()
 {
-    mReducedCombination.reserve(mUniqueCoefficients.size());
-    size_t index;
+    reduced_combination_.reserve(unique_coefficients_.size());
+    size_t index{};
 
-    for (auto const & uniqueCoefficient : mUniqueCoefficients)
+    for (auto const & unique_coefficient : unique_coefficients_)
     {
-        index = mBase.find(uniqueCoefficient.first);
-        mReducedCombination.push_back(mExtendedCombination.at(index));
+        index = base_.find(unique_coefficient.first);
+        reduced_combination_.push_back(extended_combination_.at(index));
     }
 }
 
@@ -117,7 +127,7 @@ void Combination::set(const std::vector<size_t> & combination)
 {
     if (isValid(combination))
     {
-        mExtendedCombination = combination;
+        extended_combination_ = combination;
         reduce();
     }
     else

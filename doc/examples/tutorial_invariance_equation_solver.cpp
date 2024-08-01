@@ -4,25 +4,25 @@
 
 int main()
 {
-    auto buildPath = findBuildPath();
+    const auto build_path = findBuildPath();
     Group group("tutorial_group", 2);
-    group.load(buildPath);
+    group.load(build_path);
 
     InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular);
     ies.compute(group);
-    Solutions solutions = ies.solutions();
+    const auto solutions = ies.solutions();
     print(solutions);
 
     //InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular);
     //ies.compute(group, {1, 1, 1});
-    //Solution solution = ies.solution();
+    //const auto solution = ies.solution();
     //print(solution);
 
     //InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular, group);
-    //Solutions solutions = ies.solutions();
+    //const auto solutions = ies.solutions();
     //print(solutions);
 
     //InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular, group, {1, 1, 1});
-    //Solution solution = ies.solution();
+    //const auto solution = ies.solution();
     //print(solution);
 }
