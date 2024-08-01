@@ -34,36 +34,36 @@ void print(const Group & group)
     std::cout << '\n';
 }
 
-void print(const GroupList::Data & groupInfo, const std::string & message)
+void print(const GroupList::Data & group_info, const std::string & message)
 {
-    if (message.empty() == false)
+    if (false == message.empty())
     {
         std::cout << message << '\n';
     }
-    std::cout << groupInfo.structure << " " << groupInfo.gen << '\n';
+    std::cout << group_info.structure << " " << group_info.generators << '\n';
 }
 
-void print(const std::vector<GroupList::Data> & groupsInfo, const std::string & message)
+void print(const std::vector<GroupList::Data> & groups_info, const std::string & message)
 {
-    if (message.empty() == false)
+    if (false == message.empty())
     {
         std::cout << message << '\n';
     }
 
-    for (const auto & groupInfo : groupsInfo)
+    for (const auto & group_info : groups_info)
     {
-        print(groupInfo);
+        print(group_info);
     }
 }
 
-void print(const MatrixForm & matrixForm, const std::string & message)
+void print(const MatrixForm & matrix_form, const std::string & message)
 {
     std::cout << message << '\n';
-    std::cout << matrixForm.matrix() << '\n' << '\n';
+    std::cout << matrix_form.matrix() << '\n' << '\n';
     std::cout << "phases" << '\n';
-    for (const auto & phase : matrixForm.phases())
+    for (const auto & phase : matrix_form.phases())
     {
-        std::cout << phase << "\n\n";
+        std::cout << phase << '\n' << '\n';
     }
 }
 
@@ -78,40 +78,39 @@ void print(const Representation3cd & representation)
 
 void print(const Solution & solution)
 {
-    const Eigen::IOFormat fmtMatrix(6, Eigen::DontAlignCols, " ", "\n", "[", "]");
+    const Eigen::IOFormat fmt_matrix(6, Eigen::DontAlignCols, " ", "\n", "[", "]");
 
     std::cout << solution.origin().group << '\n'
         << toString(solution.origin().combination, 'x') << " "
         << std::boolalpha << solution.isGood() << '\n'
-        << solution.transpose().format(fmtMatrix) << '\n';
+        << solution.transpose().format(fmt_matrix) << '\n';
 }
 
 void print(const Solutions & solutions)
 {
-    const Eigen::IOFormat fmtMatrix(6, Eigen::DontAlignCols, " ", "\n", "[", "]");
+    const Eigen::IOFormat fmt_matrix(6, Eigen::DontAlignCols, " ", "\n", "[", "]");
 
     std::cout << (solutions.front()).origin().group << '\n';
     for (const auto & solution : solutions)
     {
         std::cout << toString(solution.origin().combination, 'x') << " "
             << std::boolalpha << solution.isGood() << '\n'
-            << solution.transpose().format(fmtMatrix) << '\n';
+            << solution.transpose().format(fmt_matrix) << '\n';
     }
     std::cout << '\n';
 }
 
 void print(const UniqueSolution & unique, std::ostream & os)
 {
-    const Eigen::IOFormat fmtVector(6, Eigen::DontAlignCols, " ", " ", "", "", "[", "]");
-    const Eigen::IOFormat fmtPhase(6, Eigen::DontAlignCols, " ", " ", "", "", "{", "}");
+    const Eigen::IOFormat fmt_vector(6, Eigen::DontAlignCols, " ", " ", "", "", "[", "]");
+    const Eigen::IOFormat fmt_phase(6, Eigen::DontAlignCols, " ", " ", "", "", "{", "}");
 
-    os << unique.transpose().format(fmtVector) << '\n';
-    if (unique.phases().empty() == false)
+    os << unique.transpose().format(fmt_vector) << '\n';
+    if (false == unique.phases().empty())
     {
-        auto phases = unique.phases();
-        for (auto & phase : phases)
+        for (auto & phase : unique.phases())
         {
-            os << phase.transpose().format(fmtPhase) << " ";
+            os << phase.transpose().format(fmt_phase) << " ";
         }
         os << '\n';
     }
@@ -128,7 +127,7 @@ void print(const UniqueSolutions & uniques, std::ostream & os)
 
 std::string toString(const std::vector<size_t> & vector, const char sep)
 {
-    std::string result;
+    std::string result{};
     for (auto i = 0; i < vector.size(); ++i)
     {
         result += (i == vector.size() - 1) ? std::to_string(vector[i]) : std::to_string(vector[i]) + sep;

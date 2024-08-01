@@ -1,5 +1,5 @@
-#ifndef MYMATRIX_H
-#define MYMATRIX_H
+#ifndef INCLUDE_3HDM_MYMATRIX_H
+#define INCLUDE_3HDM_MYMATRIX_H
 
 #include <iostream>
 #include <filesystem>
@@ -18,7 +18,7 @@ public:
 
     virtual void setActualZero();
     void load(std::stringstream & ss);
-    void load(const std::string & fileName, const std::string & fileDir);
+    void load(const std::string & file_name, const std::string & file_directory);
 };
 
 typedef MyMatrix<std::complex<double>, 2, 2> MyMatrix2cd;
@@ -100,28 +100,28 @@ void MyMatrix<_Scalar, _Rows, _Cols>::setActualZero()
 template <typename _Scalar, int _Rows, int _Cols>
 void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream & ss)
 {
-    if (ss.str() == "")
+    if (ss.str().empty())
     {
-        std::cerr << "Stringstream is empty!" << '\n';
+        std::cerr << "Error while loading matrix: stringstream is empty!" << '\n';
         *this = MyMatrix<_Scalar, Eigen::Dynamic, Eigen::Dynamic>(0, 0);
         return;
     }
 
-    _Scalar scalar;
-    std::vector<_Scalar> scalars;
-    while (ss >> scalar) scalars.push_back(scalar);
+    _Scalar scalar{};
+    std::vector<_Scalar> scalars{};
+    while (ss >> scalar) { scalars.push_back(scalar); }
 
     if (scalars.size() % _Rows != 0)
     {
-        std::cerr << "Wrong number of elements!" << '\n';
+        std::cerr << "Error while loading matrix: wrong number of elements!" << '\n';
         *this = MyMatrix<_Scalar, Eigen::Dynamic, Eigen::Dynamic>(0, 0);
         return;
     }
 
     *this = MyMatrix<_Scalar, Eigen::Dynamic, Eigen::Dynamic>(_Rows, _Cols);
-    for (size_t row = 0; row < _Rows; ++row)
+    for (auto row = 0; row < _Rows; ++row)
     {
-        for (size_t col = 0; col < _Cols; ++col)
+        for (auto col = 0; col < _Cols; ++col)
         {
             this->operator()(row, col) = scalars[(row * _Rows) + col];
         }
@@ -129,27 +129,27 @@ void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream & ss)
 }
 
 template <typename _Scalar, int _Rows, int _Cols>
-void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string & fileName, const std::string & fileDir)
+void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string & file_name, const std::string & file_directory)
 {
-    auto filePath = std::filesystem::path(fileDir + '/' + fileName);
-    std::fstream ifile;
-    ifile.open(filePath, std::ios::in);
-    if(ifile.is_open() == false)
+    const std::filesystem::path file_path{file_directory + '/' + file_name};
+    std::fstream ifile{};
+
+    ifile.open(file_path, std::ios::in);
+    if(false == ifile.is_open())
     {
-        std::cerr << filePath << " file not opening properly!" << '\n';
+        std::cerr << file_path << " file not opening properly!" << '\n';
         exit(EXIT_FAILURE);
     }
 
-    std::stringstream ss;
-    std::string matrixRow;
-    while(std::getline(ifile, matrixRow))
+    std::stringstream ss{};
+    std::string matrix_row{};
+
+    while(std::getline(ifile, matrix_row))
     {
-        ss << matrixRow + "\n";
+        ss << matrix_row + "\n";
     }
 
     load(ss);
 }
 
-#endif // MYMATRIX_H
-
-// TODO: loadFromFile method of MyMatrixX class needs to provide any information about matrix dimension
+#endif  // INCLUDE_3HDM_MYMATRIX_H

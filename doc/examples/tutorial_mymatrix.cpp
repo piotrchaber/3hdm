@@ -4,19 +4,19 @@
 
 int main()
 {
-    MyMatrix3cd matrix(MyMatrix3cd::Random());
+    const MyMatrix3cd matrix(MyMatrix3cd::Random());
     std::cout << matrix << "\n\n";
 
-    std::stringstream ss;
+    std::stringstream ss{};
     ss << 1 << " " << 2 << " " << 3 << " " << 4;
 
-    MyMatrix2d matrixss;
-    matrixss.load(ss);
-    std::cout << matrixss << "\n\n";
+    MyMatrix2d matrix_ss{};
+    matrix_ss.load(ss);
+    std::cout << matrix_ss << "\n\n";
 
-    auto buildPath = findBuildPath();
+    const auto build_path = findBuildPath();
 
-    MyMatrix3cf matrixfile;
-    matrixfile.load("tutorial_mymatrix.txt", buildPath);
-    std::cout << matrixfile << '\n';
+    MyMatrix3cf matrix_file{};
+    matrix_file.load("tutorial_mymatrix.txt", build_path);
+    std::cout << matrix_file << '\n';
 }

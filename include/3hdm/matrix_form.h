@@ -1,5 +1,5 @@
-#ifndef MATRIXFORM_H
-#define MATRIXFORM_H
+#ifndef INCLUDE_3HDM_MATRIX_FORM_H
+#define INCLUDE_3HDM_MATRIX_FORM_H
 
 #include <vector>
 
@@ -10,25 +10,24 @@ class MatrixForm
 public:
     enum class Form { Original, Particular, General };
 
-    MatrixForm(const MyMatrixXcd & matrix, const Form & form);
+    MatrixForm(const MyMatrixXcd & matrix, const Form form);
 
     const MyMatrixXcd & matrix() const;
-    const MyVectorXcd & phase(size_t ith) const;
+    const MyVectorXcd & phase(const size_t ith) const;
     const std::vector<MyVectorXcd> & phases() const;
 
-protected:
+private:
     void setGeneralForm();
     void setOriginalForm();
     void setParticularForm();
-    void setMatrixForm(const Form & form);
+    void setMatrixForm(const Form form);
     void setActualZero();
     void sortByIndex();
     void setFirstElementTo(const std::complex<double> & value);
     void extractColumnAndPhase();
 
-private:
-    MyMatrixXcd mMatrix;
-    std::vector<MyVectorXcd> mPhases;
+    MyMatrixXcd matrix_{};
+    std::vector<MyVectorXcd> phases_{};
 };
 
-#endif // MATRIXFORM_H
+#endif  // INCLUDE_3HDM_MATRIX_FORM_H

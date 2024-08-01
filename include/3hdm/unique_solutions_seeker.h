@@ -1,5 +1,5 @@
-#ifndef UNIQUESOLUTIONSSEEKER_H
-#define UNIQUESOLUTIONSSEEKER_H
+#ifndef INCLUDE_3HDM_UNIQUE_SOLUTIONS_SEEKER_H
+#define INCLUDE_3HDM_UNIQUE_SOLUTIONS_SEEKER_H
 
 #include "invariance_equation_solver.h"
 
@@ -18,8 +18,8 @@ public:
 
     private:
         using MyVectorXcd::MyVectorXcd;
-        std::string mGroups;
-        std::vector<MyVectorXcd> mPhases;
+        std::string groups_{};
+        std::vector<MyVectorXcd> phases_{};
     };
 
     UniqueSolutionsSeeker() = default;
@@ -28,18 +28,17 @@ public:
 
     void find(const Solution & solution);
     void find(const Solutions & solutions);
-    const Item & item(size_t ith) const;
+    const Item & item(const size_t ith) const;
     const std::vector<Item> & items() const;
 
-protected:
+private:
     void check(const Solution::ConstColXpr & column, const std::string & group);
     void check(const Solution::ConstColXpr & column, const std::string & group, const MyVectorXcd & phase);
 
-private:
-    std::vector<Item> mItems;
+    std::vector<Item> items_{};
 };
 
 typedef UniqueSolutionsSeeker::Item UniqueSolution;
 typedef std::vector<UniqueSolution> UniqueSolutions;
 
-#endif // UNIQUESOLUTIONSSEEKER_H
+#endif  // INCLUDE_3HDM_UNIQUE_SOLUTIONS_SEEKER_H

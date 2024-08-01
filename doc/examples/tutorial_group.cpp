@@ -6,16 +6,17 @@ int main()
 {
     using cd = std::complex<double>;
 
-    MyMatrix3cd matrix1;
-    MyMatrix3cd matrix2;
-    MyMatrix3cd matrix3;
+    MyMatrix3cd matrix1{};
+    MyMatrix3cd matrix2{};
+    MyMatrix3cd matrix3{};
+
     matrix1 << cd(0, 0), cd(1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(1, 0), cd(1, 0), cd(0, 0), cd(0, 0);
     matrix2 << cd(-1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(-1, 0);
     matrix3 << cd(-1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(-1, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(1, 0);
 
-    Representation3cd representation({ matrix1, matrix2, matrix3 });
+    const Representation3cd representation({ matrix1, matrix2, matrix3 });
 
-    Group group;
+    Group group{};
     group.setStructure("[ 12, 3 ]");
     group.setNumberOfGenerators(3);
     group.setRepresentations({ representation });
@@ -28,15 +29,15 @@ int main()
 
     //Group group({ representation }, "[ 12, 3 ]", 3);
 
-    auto buildPath = findBuildPath();
+    const auto build_path = findBuildPath();
 
     /*Group group2("[ 21, 1 ]", 2);
-    group2.load("tutorial_group", buildPath);
+    group2.load("tutorial_group", build_path);
     std::cout << "Group representations:" << '\n';
     print(group2);*/
 
     Group group2("tutorial_group", 2);
-    group2.load(buildPath);
+    group2.load(build_path);
     std::cout << "Group representations:" << '\n';
     print(group2);
 
@@ -45,7 +46,7 @@ int main()
     std::cout << "RepresentationsNumber: " << group2.numberOfRepresentations() << '\n';
     std::cout << '\n';
 
-    auto generator = group2.generator(1);
+    const auto generator = group2.generator(1);
     std::cout << "1stGeneratorMatrices:" << '\n';
     for (const auto & matrix : generator)
     {
