@@ -2,12 +2,12 @@
 
 std::filesystem::path findBuildPath()
 {
-    std::filesystem::path buildPath{std::filesystem::current_path()};
-    while (buildPath.filename() != "build")
+    std::filesystem::path build_path{std::filesystem::current_path()};
+    while (build_path.filename() != "build")
     {
-        buildPath = buildPath.parent_path();
+        build_path = build_path.parent_path();
     }
-    return buildPath;
+    return build_path;
 }
 
 void print(const std::vector<size_t> & combination)
