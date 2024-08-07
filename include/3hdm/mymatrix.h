@@ -109,6 +109,7 @@ void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream & ss)
 
     _Scalar scalar{};
     std::vector<_Scalar> scalars{};
+
     while (ss >> scalar) { scalars.push_back(scalar); }
 
     if (scalars.size() % _Rows != 0)

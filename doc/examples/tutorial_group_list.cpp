@@ -5,8 +5,8 @@
 int main()
 {
     const auto build_path = findBuildPath();
-    const auto inputs_path = build_path / "inputs";
-    GroupList::Init(inputs_path);
+    const auto input_path = build_path / "input";
+    GroupList::Init(input_path);
 
     const auto order_24 = GroupList::Order(24);
     print(order_24, "Groups of order 24");

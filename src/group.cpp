@@ -3,6 +3,8 @@
 #include <cassert>
 #include <filesystem>
 
+#include "nlohmann/json.hpp"
+
 Group::Group(const std::string & structure)
     : structure_(structure), number_of_generators_(0)
 {
@@ -50,7 +52,6 @@ std::vector<MyMatrix3cd> Group::generator(const size_t ith, const std::vector<si
     return result;
 }
 
-
 void Group::load(const std::string & file_directory)
 {
     load(structure_, file_directory);
@@ -58,7 +59,7 @@ void Group::load(const std::string & file_directory)
 
 void Group::load(const std::string & file_name, const std::string & file_directory)
 {
-    const std::filesystem::path file_path{file_directory + '/' + file_name};
+    const std::filesystem::path file_path{file_directory + '/' + file_name + ".json"};
     std::fstream ifile{};
 
     ifile.open(file_path, std::ios::in);
@@ -68,32 +69,26 @@ void Group::load(const std::string & file_name, const std::string & file_directo
         exit(EXIT_FAILURE);
     }
 
+    nlohmann::json json_data{nlohmann::json::object()};
+    ifile >> json_data;
+
     MyMatrix3cd matrix{};
     std::vector<MyMatrix3cd> matrices{};
-    std::string matrix_row{};
     std::stringstream ss{};
-    size_t dimension{0};
-    size_t generators{0};
 
     representations_.clear();
-    while (std::getline(ifile, matrix_row))
+    for (auto const & json_representation : json_data["matrices"])
     {
-        ss << matrix_row + '\n';
-        if (3 == ++dimension)
+        for (auto const & json_matrix : json_representation)
         {
-            ++generators;
+            ss << json_matrix.get<std::string>();
             matrix.load(ss);
             matrices.push_back(matrix);
             ss.str(std::string());
             ss.clear();
-            dimension = 0;
         }
-        if (generators == number_of_generators_)
-        {
-            representations_.push_back(Representation3cd(matrices));
-            matrices.clear();
-            generators = 0;
-        }
+        representations_.push_back(Representation3cd(matrices));
+        matrices.clear();
     }
 }
 

@@ -3,8 +3,8 @@
 int main()
 {
     const auto build_path = findBuildPath();
-    const auto inputs_path = build_path / "inputs";
-    GroupList::Init(inputs_path);
+    const auto input_path = build_path / "input";
+    GroupList::Init(input_path);
 
     InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular);
     Group group{};
@@ -17,7 +17,7 @@ int main()
     {
         group.setStructure(group_info.structure);
         group.setNumberOfGenerators(group_info.generators);
-        group.load(inputs_path / "groups");
+        group.load(input_path / "groups");
 
         ies.compute(group);
         solutions = ies.solutions();
