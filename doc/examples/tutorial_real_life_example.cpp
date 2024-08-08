@@ -17,11 +17,10 @@ int main()
     {
         group.setStructure(group_info.structure);
         group.setNumberOfGenerators(group_info.generators);
-        group.load(input_path / "groups");
+        group.load(input_path);
 
         ies.compute(group);
         solutions = ies.solutions();
-        //print(solutions);
 
         unique_particular_solutions_seeker.find(solutions);
         for (auto & solution : solutions) { solution.switchFormTo(Solution::Form::General); }

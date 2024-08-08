@@ -6,6 +6,8 @@
 #include <fstream>
 #include <iostream>
 
+#include "nlohmann/json.hpp"
+
 namespace
 {
 
@@ -172,63 +174,42 @@ std::vector<GroupList::Data> GroupList::Structures(const std::vector<std::pair<s
 
 std::vector<GroupList::Data> GroupList::loadData()
 {
+    if (false == std::filesystem::is_directory(path_))
+    {
+        std::cerr << path_ << " directory does not exist!" << '\n';
+        exit(EXIT_FAILURE);
+    }
+
     std::vector<Data> result{};
+
+    for (const auto & entry : std::filesystem::directory_iterator(path_))
+    {
+        result.push_back(loadFile(entry.path()));
+    }
+
+    std::sort(result.begin(), result.end());
+
+    return result;
+}
+
+GroupList::Data GroupList::loadFile(const std::string & file_path)
+{
+    std::fstream ifile{};
+
+    ifile.open(file_path, std::ios::in);
+    if (false == ifile.is_open())
+    {
+        std::cerr << file_path << " file not opening properly!" << '\n';
+        exit(EXIT_FAILURE);
+    }
+
+    nlohmann::json json_data{nlohmann::json::object()};
+    ifile >> json_data;
+
     Data data{};
-    const std::vector<std::string> structures{loadStructures()};
-    const std::vector<size_t> generators{loadGenerators()};
+    data.structure = json_data["structure"];
+    data.generators = json_data["generators"];
+    data.representations = json_data["representations"];
 
-    for (auto index = 0; index < std::min(structures.size(), generators.size()); ++index)
-    {
-        data.generators = generators.at(index);
-        data.structure = structures.at(index);
-        result.push_back(data);
-    }
-
-    return result;
-}
-
-std::vector<size_t> GroupList::loadGenerators()
-{
-    const std::filesystem::path file_path{path_ + "/generators.txt"};
-    std::fstream ifile{};
-
-    ifile.open(file_path, std::ios::in);
-    if (false == ifile.is_open())
-    {
-        std::cerr << file_path << " file not opening properly!" << '\n';
-        exit(EXIT_FAILURE);
-    }
-
-    std::vector<size_t> result{};
-    size_t data{};
-
-    while (ifile >> data)
-    {
-        result.push_back(data);
-    }
-
-    return result;
-}
-
-std::vector<std::string> GroupList::loadStructures()
-{
-    const std::filesystem::path file_path{path_ + "/groups.txt"};
-    std::fstream ifile{};
-
-    ifile.open(file_path, std::ios::in);
-    if (false == ifile.is_open())
-    {
-        std::cerr << file_path << " file not opening properly!" << '\n';
-        exit(EXIT_FAILURE);
-    }
-
-    std::vector<std::string> result{};
-    std::string data{};
-
-    while (getline(ifile, data))
-    {
-        result.push_back(data);
-    }
-
-    return result;
+    return data;
 }

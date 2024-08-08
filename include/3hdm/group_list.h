@@ -9,8 +9,9 @@ class GroupList
 public:
     struct Data
     {
-        std::string structure;
-        size_t generators;
+        std::string structure{};
+        size_t generators{};
+        size_t representations{};
         bool operator<(const Data & right) const;
     };
 
@@ -28,8 +29,7 @@ public:
 
 private:
     static std::vector<Data> loadData();
-    static std::vector<size_t> loadGenerators();
-    static std::vector<std::string> loadStructures();
+    static Data loadFile(const std::string & path);
 
     static std::string path_;
     static std::vector<Data> data_;

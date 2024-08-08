@@ -40,7 +40,8 @@ void print(const GroupList::Data & group_info, const std::string & message)
     {
         std::cout << message << '\n';
     }
-    std::cout << group_info.structure << " " << group_info.generators << '\n';
+    std::cout << group_info.structure << " " << group_info.generators
+        << " " << group_info.representations << '\n';
 }
 
 void print(const std::vector<GroupList::Data> & groups_info, const std::string & message)
