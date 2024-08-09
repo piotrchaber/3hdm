@@ -18,7 +18,6 @@ public:
 
     virtual void setActualZero();
     void load(std::stringstream & ss);
-    void load(const std::string & file_name, const std::string & file_directory);
 };
 
 typedef MyMatrix<std::complex<double>, 2, 2> MyMatrix2cd;
@@ -127,30 +126,6 @@ void MyMatrix<_Scalar, _Rows, _Cols>::load(std::stringstream & ss)
             this->operator()(row, col) = scalars[(row * _Rows) + col];
         }
     }
-}
-
-template <typename _Scalar, int _Rows, int _Cols>
-void MyMatrix<_Scalar, _Rows, _Cols>::load(const std::string & file_name, const std::string & file_directory)
-{
-    const std::filesystem::path file_path{file_directory + '/' + file_name};
-    std::fstream ifile{};
-
-    ifile.open(file_path, std::ios::in);
-    if(false == ifile.is_open())
-    {
-        std::cerr << file_path << " file not opening properly!" << '\n';
-        exit(EXIT_FAILURE);
-    }
-
-    std::stringstream ss{};
-    std::string matrix_row{};
-
-    while(std::getline(ifile, matrix_row))
-    {
-        ss << matrix_row + "\n";
-    }
-
-    load(ss);
 }
 
 #endif  // INCLUDE_3HDM_MYMATRIX_H

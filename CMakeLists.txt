@@ -32,7 +32,7 @@ set(INPUT_DIR
 )
 
 set(INPUT_FILES
-    tutorial_group.json tutorial_mymatrix.txt tutorial_representation.txt
+    tutorial_group.json
 )
 
 if(NOT EXISTS ${EIGEN_DIR})

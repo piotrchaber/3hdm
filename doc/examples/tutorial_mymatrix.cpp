@@ -1,5 +1,3 @@
-#include "tutorial.h"
-
 #include "3hdm/mymatrix.h"
 
 int main()
@@ -13,10 +11,4 @@ int main()
     MyMatrix2d matrix_ss{};
     matrix_ss.load(ss);
     std::cout << matrix_ss << "\n\n";
-
-    const auto build_path = findBuildPath();
-
-    MyMatrix3cf matrix_file{};
-    matrix_file.load("tutorial_mymatrix.txt", build_path);
-    std::cout << matrix_file << '\n';
 }

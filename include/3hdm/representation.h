@@ -16,7 +16,6 @@ public:
     virtual ~Representation() = default;
 
     static int dimension();
-    void load(const std::string & file_name, const std::string & file_directory);
     const std::vector<MyMatrix<_Scalar, _Dimension, _Dimension>> & matrices() const;
     const MyMatrix<_Scalar, _Dimension, _Dimension> & matrix(const size_t ith) const;
     size_t numberOfMatrices() const;
@@ -63,39 +62,6 @@ template <typename _Scalar, int _Dimension>
 int Representation<_Scalar, _Dimension>::dimension()
 {
     return dimension_;
-}
-
-template <typename _Scalar, int _Dimension>
-void Representation<_Scalar, _Dimension>::load(const std::string & file_name, const std::string & file_directory)
-{
-    const std::filesystem::path file_path{file_directory + '/' + file_name};
-    std::fstream ifile{};
-
-    ifile.open(file_path, std::ios::in);
-    if (false == ifile.is_open())
-    {
-        std::cerr << file_path << " file not opening properly!" << '\n';
-        exit(EXIT_FAILURE);
-    }
-
-    MyMatrix<_Scalar, _Dimension, _Dimension> matrix{};
-    std::string matrix_row{};
-    std::stringstream ss{};
-    size_t dimension{0};
-
-    matrices_.clear();
-    while (std::getline(ifile, matrix_row))
-    {
-        ss << matrix_row + "\n";
-        if (++dimension == _Dimension)
-        {
-            matrix.load(ss);
-            matrices_.push_back(matrix);
-            ss.str(std::string());
-            ss.clear();
-            dimension = 0;
-        }
-    }
 }
 
 template <typename _Scalar, int _Dimension>
