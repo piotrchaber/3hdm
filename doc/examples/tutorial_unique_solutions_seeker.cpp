@@ -5,8 +5,7 @@
 int main()
 {
     const auto build_path = findBuildPath();
-
-    Group group("tutorial_group", 2);
+    Group group("tutorial_group", 2, 2);
     group.load(build_path);
 
     InvarianceEquationSolver ies(Particles::ChargedLeptons, Solution::Form::Particular, group);

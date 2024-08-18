@@ -15,8 +15,7 @@ int main()
     const std::vector<GroupList::Data> first_nine_groups{GroupList::First(9)};
     for (const auto & group_info : first_nine_groups)
     {
-        group.setStructure(group_info.structure);
-        group.setNumberOfGenerators(group_info.generators);
+        group.setData(group_info);
         group.load(input_path);
 
         ies.compute(group);
