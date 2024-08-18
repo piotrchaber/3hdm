@@ -5,23 +5,13 @@
 
 #include "nlohmann/json.hpp"
 
-Group::Group(const std::string & structure)
-    : structure_(structure), number_of_generators_(0)
+Group::Group(const GroupList::Data & data)
+    : structure_(data.structure), number_of_generators_(data.generators), number_of_representations_(data.representations)
 {
 }
 
-Group::Group(const std::string & structure, const size_t number_of_generators)
-    : structure_(structure), number_of_generators_(number_of_generators)
-{
-}
-
-Group::Group(const std::vector<Representation3cd> & representations, const std::string & structure)
-    : representations_(representations), structure_(structure), number_of_generators_(0)
-{
-}
-
-Group::Group(const std::vector<Representation3cd> & representations, const std::string & structure, const size_t number_of_generators)
-    : representations_(representations), structure_(structure), number_of_generators_(number_of_generators)
+Group::Group(const std::string & structure, const size_t number_of_generators, const size_t number_of_representations)
+    : structure_(structure), number_of_generators_(number_of_generators), number_of_representations_(number_of_representations)
 {
 }
 
@@ -92,6 +82,13 @@ void Group::load(const std::string & file_name, const std::string & file_directo
     }
 }
 
+void Group::setData(const GroupList::Data & data)
+{
+    setStructure(data.structure);
+    setNumberOfGenerators(data.generators);
+    setNumberOfRepresentations(data.representations);
+}
+
 size_t Group::numberOfGenerators() const
 {
     return number_of_generators_;
@@ -99,7 +96,7 @@ size_t Group::numberOfGenerators() const
 
 size_t Group::numberOfRepresentations() const
 {
-    return representations_.size();
+    return number_of_representations_;
 }
 
 const Representation3cd & Group::representation(const size_t ith) const
@@ -117,9 +114,9 @@ void Group::setNumberOfGenerators(const size_t number_of_generators)
     number_of_generators_ = number_of_generators;
 }
 
-void Group::setRepresentations(const std::vector<Representation3cd> & representations)
+void Group::setNumberOfRepresentations(const size_t number_of_representations)
 {
-    representations_ = representations;
+    number_of_representations_ = number_of_representations;
 }
 
 void Group::setStructure(const std::string & structure)
