@@ -8,6 +8,8 @@
 #include "mymatrix.h"
 #include "representation.h"
 
+#include "nlohmann/json.hpp"
+
 class Group
 {
 public:
@@ -31,6 +33,8 @@ public:
     const std::string & structure() const;
 
 private:
+    void check(const nlohmann::json & json_data) const;
+
     std::string structure_{};
     size_t number_of_generators_{};
     size_t number_of_representations_{};

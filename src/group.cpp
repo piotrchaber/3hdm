@@ -128,3 +128,22 @@ const std::string & Group::structure() const
 {
     return structure_;
 }
+
+void Group::check(const nlohmann::json & json_data) const
+{
+    const bool is_number_of_representations_ok{number_of_representations_ == json_data["matrices"].size()};
+    if (false == is_number_of_representations_ok)
+    {
+        std::cerr << "Number of representations provided does not match with what was loaded!" << '\n';
+        exit(EXIT_FAILURE);
+    }
+
+    const bool is_number_of_generators_ok{std::all_of(json_data["matrices"].cbegin(), json_data["matrices"].cend(), [&](auto const & json_representation) {
+        return number_of_generators_ == json_representation.size();
+    })};
+    if (false == is_number_of_generators_ok)
+    {
+        std::cerr << "Number of generators provided does not match with what was loaded!" << '\n';        
+        exit(EXIT_FAILURE);
+    }
+}
