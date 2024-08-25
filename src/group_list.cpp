@@ -181,12 +181,10 @@ std::vector<GroupList::Data> GroupList::loadData()
     }
 
     std::vector<Data> result{};
-
     for (const auto & entry : std::filesystem::directory_iterator(path_))
     {
         result.push_back(loadFile(entry.path()));
     }
-
     std::sort(result.begin(), result.end());
 
     return result;

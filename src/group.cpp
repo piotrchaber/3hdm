@@ -61,25 +61,9 @@ void Group::load(const std::string & file_name, const std::string & file_directo
 
     nlohmann::json json_data{nlohmann::json::object()};
     ifile >> json_data;
+    check(json_data);
 
-    MyMatrix3cd matrix{};
-    std::vector<MyMatrix3cd> matrices{};
-    std::stringstream ss{};
-
-    representations_.clear();
-    for (auto const & json_representation : json_data["matrices"])
-    {
-        for (auto const & json_matrix : json_representation)
-        {
-            ss << json_matrix.get<std::string>();
-            matrix.load(ss);
-            matrices.push_back(matrix);
-            ss.str(std::string());
-            ss.clear();
-        }
-        representations_.push_back(Representation3cd(matrices));
-        matrices.clear();
-    }
+    loadRepresentations(json_data);
 }
 
 void Group::setData(const GroupList::Data & data)
@@ -145,5 +129,27 @@ void Group::check(const nlohmann::json & json_data) const
     {
         std::cerr << "Number of generators provided does not match with what was loaded!" << '\n';        
         exit(EXIT_FAILURE);
+    }
+}
+
+void Group::loadRepresentations(const nlohmann::json & json_data)
+{
+    MyMatrix3cd matrix{};
+    std::vector<MyMatrix3cd> matrices{};
+    std::stringstream ss{};
+
+    representations_.clear();
+    for (auto const & json_representation : json_data["matrices"])
+    {
+        for (auto const & json_matrix : json_representation)
+        {
+            ss << json_matrix.get<std::string>();
+            matrix.load(ss);
+            matrices.push_back(matrix);
+            ss.str(std::string());
+            ss.clear();
+        }
+        representations_.push_back(Representation3cd(matrices));
+        matrices.clear();
     }
 }
