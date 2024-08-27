@@ -34,6 +34,7 @@ public:
 
 private:
     void check(const nlohmann::json & json_data) const;
+    void loadRepresentations(const nlohmann::json & json_data);
 
     std::string structure_{};
     size_t number_of_generators_{};
