@@ -242,5 +242,5 @@ Fleiven is an idea designed to generalize the process of finding solutions of th
 - we need to generalize GroupList class in such way that now using this class we will be able to get the list of groups with potential solutions (groups with representations of desired dimensions) with all necessary information
 - we need to generalize Group class to make it a set of representations of any dimensions (not only 3-dimensional ones as in the 3hdm case)
 - we need to generalize Combination class to generate all possible combinations of any-dimensional representations
-- we need to generalize the way we take matrices for given combinations of any-dimensional representations when generating invariance matrix
+- we need to generalize the way we take matrices when generating invariance matrix to make this way works for any dimensional-representations
 - we need to provide in some way information about the matrix dimensions to InvarianceEquationSolver class (the best one would be to create model class including this information)
