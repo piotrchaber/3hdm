@@ -234,3 +234,13 @@ and so on. Based on the above plan I have decided to collect these functions/met
  > **Matrix representation** of a group is a another description of a group as a group of matrices, in other words: each element of the group is replaced by the matrix in such a way that mathematical properties of the group is preserved\
  > **n-Dimensional representation** is a group of matrices of dimension n-by-n\
  > **Fact:** groups can have many generators as well as many matrix representations, even with the same dimension
+
+## Fleiven idea
+Fleiven is an idea designed to generalize the process of finding solutions of the invariance equation to the case of any physical model either defined by the user or predefined, and not just for the model with three Higgs doublet. Different models mean different form of invariance equation, different operations performed on matrices being part of this equation, and above all, different dimensions of these matrices (representations). So the only thing that will change is the process of generating invariance matrices (this process completely depends on the model we use) and the only thing that we need to take into account from a programming point of view is the fact that matrices can have different dimensions or in other words, can belong to representations of different dimensions. Here are the steps we need to take to make this idea alive:
+
+- we need to print all groups containing 2,3,4-dimensional representations up to order of lets say 100
+- we need to generalize GroupList class in such way that now using this class we will be able to get the list of groups with potential solutions (groups with representations of desired dimensions) with all necessary information
+- we need to generalize Group class to make it a set of representations of any dimensions (not only 3-dimensional ones as in the 3hdm case)
+- we need to generalize Combination class to generate all possible combinations of any-dimensional representations
+- we need to generalize the way we take matrices for given combinations of any-dimensional representations when generating invariance matrix
+- we need to provide in some way information about the matrix dimensions to InvarianceEquationSolver class (the best one would be to create model class including this information)
